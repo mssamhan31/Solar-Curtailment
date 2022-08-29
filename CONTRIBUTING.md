@@ -1,6 +1,6 @@
 # Welcome to our CANVAS-Open-Source Project!
 
->First off, thank you for considering contributing to CANVAS Open Source project. It's people like you that make CANVAS-Curtailment such a great tool.
+>First off, thank you for considering contributing here! It's people like you that make CANVAS-Open-Source project such a great tool.
 
 # What kinds of contributions we are looking for?
 
