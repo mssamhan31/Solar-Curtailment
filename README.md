@@ -1,4 +1,4 @@
-## ABOUT
+## About
 
 CANVAS (Curtailment and Network Voltage Analysis Study) is a research project led by Dr. Baran Yildiz which is funded by RACE for 2030. 
 Because the high penetration number of PV System in Australia, grid voltage is sometimes high, which triggers curtailment effect.
