@@ -8,12 +8,12 @@ This CANVAS-Open-Source project is a tool to detect curtailment and measure the 
 3. V-Watt Response (The inverter limits the maximum real power production in the high voltage condition)
 
 Given the historical time-series data of ghi, voltage, real power, reactive power, and site information like maximum ac capacity of the inverter, this tool aims to give outputs:
-a.	Does the solar inverter trip?
-b.	How much is the curtailment due to tripping curtailment in kWh/day?
-c.	Does the solar inverter show V-VAr response?
-d.	How much is the curtailment due to V-VAr response in kWh/day?
-e.	Does the solar inverter show V-Watt response?
-f.	How much is the curtailment due to V-Watt curtailment in kWh/day?
+1.	Does the solar inverter trip?
+2.	How much is the curtailment due to tripping curtailment in kWh/day?
+3.	Does the solar inverter show V-VAr response?
+4.	How much is the curtailment due to V-VAr response in kWh/day?
+5.	Does the solar inverter show V-Watt response?
+6.	How much is the curtailment due to V-Watt curtailment in kWh/day?
 
 This tool will benefit anyone who wants to study PV-Curtailment, and the improved understanding of curtailment could lead to higher levels of PV System integration. 
 
@@ -47,5 +47,3 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. 
 MIT License is chosen due to its simplicity, yet sufficient for a general use open-source tool.
-
-## Acknowledgments
