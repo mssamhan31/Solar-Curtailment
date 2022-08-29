@@ -45,3 +45,6 @@ The project partners are AGL, SAPN, Solar Analytics, and UNSW.
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. 
 MIT License is chosen due to its simplicity, yet sufficient for a general use open-source tool.
+
+## Contact
+You can contact Samhan at his email m.samhan@student.unsw.edu.au
