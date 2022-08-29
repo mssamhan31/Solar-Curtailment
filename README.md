@@ -22,10 +22,10 @@ This tool will benefit anyone who wants to study PV-Curtailment, and the improve
 2. https://theconversation.com/solar-curtailment-is-emerging-as-a-new-challenge-to-overcome-as-australia-dashes-for-rooftop-solar-172152
 3. https://www.racefor2030.com.au/wp-content/uploads/2021/11/CANVAS-Succinct-Final-Report_11.11.21.pdf
 
-## Prerequisites
+## Getting Started
 
-This project runs completely in python with common libraries.
-The sample historical dataset will be available soon.
+This project runs completely in python with common libraries using Jupyter Notebook. Hence, it is recommended to run the program in Jupyter Notebook as well.
+All the required raw data samples are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EvguTkYy48RGiXaQE5aP1l4B2OriyWIwqvi29mUL_ReKDw?e=4ceZec).
 
 ## Contributing
 
