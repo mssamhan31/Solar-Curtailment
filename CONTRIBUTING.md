@@ -19,9 +19,10 @@ Create a new issue in the repository.
 
 > When proposing a new feature, try to answer these three questions:
 > 1. Why is it important?
-> 2. What is the idea
+> 2. What is the idea?
 > 3. How does it work?
-> However, if it is not a major new feature, use pull request feature directly and add comments in the pull request.
+
+However, if it is not a major new feature, use pull request feature directly and add comments in the pull request.
 
 # Code review process
 The owner of this project is Baran who is assisted mainly by Samhan. Samhan will be the person mostly do the project. 
