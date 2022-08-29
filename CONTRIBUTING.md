@@ -26,7 +26,7 @@ However, if it is not a major new feature, use pull request feature directly and
 
 # Code review process
 The owner of this project is Baran who is assisted mainly by Samhan. Samhan will be the person mostly do the project. 
-So, any changes will be mainy reviewed by Samhan, but he will ask Baran's approval if it is a major change. Samhan will work on this project on a daily basis, so any review will be done in 1-3 working-days.
+So, any changes will be mainy reviewed by him, but he will ask Baran's approval if it is a major change. Samhan will work on this project on a daily basis, so any review will be done in 1-3 working-days.
 
 # Correspondence
 If there is any questions regarding the project, reach Samhan by email : m.samhan@student.unsw.edu.au
