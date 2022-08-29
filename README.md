@@ -1,8 +1,8 @@
-# CANVAS-Open-Source
+## ABOUT
 
 CANVAS (Curtailment and Network Voltage Analysis Study) is a research project led by Dr. Baran Yildiz which is funded by RACE for 2030. 
 Because the high penetration number of PV System in Australia, grid voltage is sometimes high, which triggers curtailment effect.
-This CANVAS-Open-Source project is a tool to detect curtailment and measure the amount of energy curtailed in three modes:
+This Solar Curtailment (CANVAS) project is a tool to detect curtailment and measure the amount of energy curtailed in three modes:
 1. Tripping (the inverter stops operating in the high voltage condition)
 2. V-VAr Response (VAr absorbtion and injection of inverter limits the maximum real power in the high voltage condition)
 3. V-Watt Response (The inverter limits the maximum real power production in the high voltage condition)
@@ -29,7 +29,7 @@ The sample historical dataset will be available soon.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Project Partners
 The project partners are AGL, SAPN, Solar Analytics, and UNSW.
