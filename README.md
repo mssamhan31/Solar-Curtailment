@@ -29,7 +29,7 @@ All the required raw data samples are available in [this link](https://unsw-my.s
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for instruction to contribute.
 
 ## Project Partners
 The project partners are AGL, SAPN, Solar Analytics, and UNSW.
@@ -44,7 +44,6 @@ The project partners are AGL, SAPN, Solar Analytics, and UNSW.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. 
-MIT License is chosen due to its simplicity, yet sufficient for a general use open-source tool.
 
 ## Contact
-You can contact Samhan at his email m.samhan@student.unsw.edu.au.
+Email m.samhan@student.unsw.edu.au.
