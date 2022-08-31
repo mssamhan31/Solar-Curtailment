@@ -22,9 +22,13 @@ Create a new issue in the repository.
 > 2. What is the idea?
 > 3. How does it work?
 
-For each issue, please rate it according to its importance and its effort by 1-5 scale in the title. Importance of scale 5 means it is a major bug related to the script functionality or miscalculation. Effort is mainly rated based on the estimated time to complete the issue. If it takes more than a week, rate the effort as 5. Generally, we prioritize solving issue with high importance and low effort. So, the title format for the issue is:
-_title_ - IE, for example:
-Inconsistent Energy Generation Calculation by Naomi, Baran, and Tim's script - 43
+For each issue, please rate it according to its importance and its effort by 1-5 scale in the title. Importance of scale 5 means it is a major bug related to the script functionality or miscalculation. Effort is mainly rated based on the estimated time to complete the issue. If it takes more than a week, rate the effort as 5. Generally, we prioritize solving issue with high importance and low effort. 
+
+So, the title format for the issue is:
+> _title_ - IE, for example:
+> Inconsistent Energy Generation Calculation by Naomi, Baran, and Tim's script - 43
+
+It means the importance is 4 and the effort is 3.
 
 If it is not a major new feature or takes less than 1 hour of work, use pull request feature directly and add comments in the pull request.
 
