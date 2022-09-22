@@ -15,15 +15,10 @@ Given the historical time-series data of ghi, voltage, real power, reactive powe
 
 This tool will benefit anyone who wants to study PV-Curtailment, and the improved understanding of curtailment could lead to higher levels of PV System integration. 
 
-## Some Related Articles and Papers
-1. https://greenreview.com.au/energy/rooftop-solar-pv-curtailment-raises-fairness-concerns/
-2. https://theconversation.com/solar-curtailment-is-emerging-as-a-new-challenge-to-overcome-as-australia-dashes-for-rooftop-solar-172152
-3. https://www.racefor2030.com.au/wp-content/uploads/2021/11/CANVAS-Succinct-Final-Report_11.11.21.pdf
-
 ## Getting Started
 
 This project runs completely in python with common libraries using Jupyter Notebook. Hence, it is recommended to run the program in Jupyter Notebook as well.
-All the required raw data samples are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EvguTkYy48RGiXaQE5aP1l4B2OriyWIwqvi29mUL_ReKDw?e=4ceZec). The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx)
+All the required raw data samples are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EvguTkYy48RGiXaQE5aP1l4B2OriyWIwqvi29mUL_ReKDw?e=4ceZec). The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx). The main script is available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/src/SolA%20Curtailment%20Daily%20Analysis.ipynb).
 
 ## Tool Use Demonstration
 ### Input
@@ -134,6 +129,11 @@ Similary, the GHI data we have is a monthly data. So, we filter it into certain 
 ## Tool Limitation & Notes
 1. For the power scatter plot, the reactive power is sometime seen above zero in the VVAr site. It should be worth to note that these reactive power should have been negative, because the inverter is absorving reactive power from the grid in the daytime. 
 2. In the power lineplot in VVAr site, we sometime see the power limit due to vvar response is below the actual power generated. This is attributed to the fact that we do not have the actual va data of the inverter, and use the ac capacity data of the inverter to estimate the va capacity. This is an underestimation, so the power limit is lower than the actual value.
+
+## Some Related Articles and Papers
+1. https://greenreview.com.au/energy/rooftop-solar-pv-curtailment-raises-fairness-concerns/
+2. https://theconversation.com/solar-curtailment-is-emerging-as-a-new-challenge-to-overcome-as-australia-dashes-for-rooftop-solar-172152
+3. https://www.racefor2030.com.au/wp-content/uploads/2021/11/CANVAS-Succinct-Final-Report_11.11.21.pdf
 
 ## Contributing
 
