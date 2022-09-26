@@ -15,8 +15,9 @@ import itertools
 #import datetime
 from time import gmtime, strftime
 from matplotlib import cm
-%matplotlib qt
-%matplotlib inline
+from IPython.display import display
+#%matplotlib qt
+#%matplotlib inline
 
 #SET GLOBAL PARAMETERS
 # ================== Global parameters for fonts & sizes =================
@@ -81,11 +82,12 @@ def check_energy_expected_generated(data_site, date):
     return energy_generated_expected
 
 #CHECK CLEAR SKY DAY
-def check_clear_sky_day(date):
+def check_clear_sky_day(date, file_path):
     """Check whether a certain date is a clear sky day based on the ghi data of that day. Needs ghi data.
 
     Args:
-    date (str): dat ein YYYYMMDD format
+    date (str): date in YYYYMMDD format
+    file_path (str): file_path of the ghi file
 
     Returns:
     clear_sky_day (bool): is it a clear sky day or not
@@ -2946,7 +2948,7 @@ def check_energy_curtailed(curtailed_data):
     return curt_energy
     
     
-def check_vwatt_response(data_site):
+def check_vwatt_response(data_site, ac_cap):
     """Check whether the inverter shows vwatt response or not.
     
     This function will be done in a loop over Vlimit 235 - 255 V.
@@ -2958,7 +2960,7 @@ def check_vwatt_response(data_site):
 
     Args:
         data_site (df) : D-PV time series data
-        polyfit(polyfit): a funciton to map timestamp value to expected power without curtailment
+        ac_cap(int): ac capacity of the inverter value
 
     Returns:
         vwatt_response (str) : Yes, None, or Inconclusive due to insufficient overvoltage datapoint.
@@ -3031,13 +3033,15 @@ def check_vwatt_response(data_site):
             
     return vwatt_response, vwatt_curt_energy
 
-def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality):
+def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path, ac_cap):
     """Check the vwatt response and amount of curtailment due to vwatt response. 
 
     Args:
         data_site (df) : D-PV time series data
         date (str) : date
         is_good_polyfit_quality (bool) : whether the certain date is a clear sky day or not
+        file_path (str): file path where the data is saved
+        ac_cap(int): ac capacity of the inverter value
 
     Returns:
         data_site (df) : D-PV time series data, probably better to be removed before because redundant
@@ -3046,7 +3050,7 @@ def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality):
     """
     
     #check if clear sky day. This contains redundant steps like making ghi dict for all days etc, can still be improved.
-    is_clear_sky_day = check_clear_sky_day(date) 
+    is_clear_sky_day = check_clear_sky_day(date, file_path) 
     global vwatt_data
     vwatt_data = pd.DataFrame() #this is redundant, probably remove later.
 
@@ -3072,7 +3076,7 @@ def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality):
         return data_site, vwatt_response, vwatt_curt_energy
 
     #check vwatt-response here
-    vwatt_response, vwatt_curt_energy = check_vwatt_response(data_site)
+    vwatt_response, vwatt_curt_energy = check_vwatt_response(data_site, ac_cap)
     
     return data_site, vwatt_response, vwatt_curt_energy
 
@@ -3300,11 +3304,12 @@ def check_energy_expected(energy_generated, tripping_curt_energy, vvar_curt_ener
     return energy_generated_expected, estimation_method
 
 #DATA VISUALIZATION
-def display_ghi(ghi):
+def display_ghi(ghi, date):
     ''' Display GHI plot of the day
     
     Args:
         ghi(df) : ghi data of the day
+        date (str): the date of the analysis
 
     Returns:
         None, but displaying GHI plot
@@ -3336,11 +3341,12 @@ def display_ghi(ghi):
 
     plt.show()
     
-def display_power_scatter(data_site):
+def display_power_scatter(data_site, ac_cap):
     ''' Display P/VA rated, Q/VA rated, and PF (P/VA) as a scatter plot
     
     Args:
         date_site(df) : time series D-PV data
+        ac_cap (int) : ac capacity of the inverter
 
     Returns:
         None, but displaying plot
@@ -3368,11 +3374,14 @@ def display_power_scatter(data_site):
 
     plt.show()
     
-def display_power_voltage(data_site):
+def display_power_voltage(data_site, date, vwatt_response, vvar_response):
     ''' Display power, reactive power, expected power, power limit due to vwatt/vvar, and voltage
     
     Args:
         date_site(df) : time series D-PV data
+        date (str): date of analysis
+        vwatt_response (str): whether there is vwatt repsonse or not
+        vvar_response (str): whether there is vvar response or not
 
     Returns:
         None, but displaying plot
@@ -3424,3 +3433,55 @@ def display_power_voltage(data_site):
     #plt.title('Power and Voltage', **fontdict)
 
     plt.show()
+
+def compute(file_path, data_file, ghi_file):
+    ''' Compute solar curtailment from D-PV time series data of a certain site in a certain date & ghi data.
+    
+    Args:
+        file_path (str) : directory path
+        data_file (str) : D-PV time series data of a certain site in a certain date file name
+        ghi_file (str) : ghi file name
+
+    Returns:
+        None, but displaying summary of curtailment analysis, ghi plot, power scatter plot, and power lineplot.
+    '''
+    
+    site_details, unique_cids= input_general_files(file_path)
+    summary_all_samples = pd.DataFrame()
+    sample_number = 10
+
+    data = pd.read_csv(file_path + data_file)
+    size_is_ok = check_data_size(data)
+    if not size_is_ok:
+        print('Cannot analyze this sample due to incomplete data.')
+    else:
+        ghi = pd.read_csv(file_path + ghi_file, index_col = 0)
+        ghi.index = pd.to_datetime(ghi.index)
+        pd.to_datetime(data['Timestamp'].str.slice(0, 19, 1))
+        data['Timestamp'] = pd.to_datetime(data['Timestamp'].str.slice(0, 19, 1))
+        data.set_index('Timestamp', inplace=True)
+
+        c_id = data['c_id'][0]
+        date = str(data.index[0])[:10]
+
+        data_site, ac_cap, dc_cap, EFF_SYSTEM, inverter = site_organize(c_id, site_details, data, unique_cids)
+        data_site = resample_in_minute(data_site)
+
+        #check the expected power using polyfit
+        data_site, polyfit, is_good_polyfit_quality = check_polyfit(data_site, ac_cap)
+        #data_site, a, is_good_polyfit_quality = check_polyfit_constrained(data_site, ac_cap)
+
+        is_clear_sky_day = check_clear_sky_day(date, file_path)
+        tripping_response, tripping_curt_energy, estimation_method, data_site = check_tripping_curtailment(is_clear_sky_day, c_id, data_site, unique_cids, ac_cap, site_details, date)    
+        energy_generated, data_site = check_energy_generated(data_site, date, is_clear_sky_day, tripping_curt_energy)
+        vvar_response, vvar_curt_energy, data_site = check_vvar_curtailment(c_id, date, data_site, ghi, ac_cap, dc_cap, EFF_SYSTEM, is_clear_sky_day)
+        data_site, vwatt_response, vwatt_curt_energy = check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path, ac_cap)
+
+        energy_generated_expected, estimation_method = check_energy_expected(energy_generated, tripping_curt_energy, vvar_curt_energy, vwatt_curt_energy, is_clear_sky_day)
+
+        summary = summarize_result_into_dataframe(c_id, date, is_clear_sky_day, energy_generated, energy_generated_expected, estimation_method, tripping_response, tripping_curt_energy, vvar_response, vvar_curt_energy, vwatt_response, vwatt_curt_energy)
+
+        display(summary)
+        display_ghi(ghi, date)
+        display_power_scatter(data_site, ac_cap)
+        display_power_voltage(data_site, date, vwatt_response, vvar_response)
