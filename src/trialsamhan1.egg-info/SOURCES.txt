@@ -1,6 +1,7 @@
 LICENSE.md
 README.md
 pyproject.toml
+src/__init__.py
 src/solarcurtailment.py
 src/trialsamhan1.egg-info/PKG-INFO
 src/trialsamhan1.egg-info/SOURCES.txt
