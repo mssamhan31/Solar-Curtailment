@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trialsamhan1"
-version = "1.0.2"
+version = "1.0.3"
 description = "Analyze solar curtailment of a certain site in a certain date"
 readme = "README.md"
 authors = [{ name = "Naomi Stringer, Baran Yildiz, Timothy Klymenko, M. Syahman Samhan", email = "m.samhan@student.unsw.edu.au" }]
@@ -28,7 +28,7 @@ requires-python = ">=3.7"
 
 
 [tool.bumpver]
-current_version = "1.0.2"
+current_version = "1.0.3"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "bump version {old_version} -> {new_version}"
 commit          = true
