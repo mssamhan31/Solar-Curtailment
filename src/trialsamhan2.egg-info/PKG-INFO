@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: trialsamhan1
-Version: 1.0.3
+Name: trialsamhan2
+Version: 1.0.1
 Summary: Analyze solar curtailment of a certain site in a certain date
 Author-email: "Naomi Stringer, Baran Yildiz, Timothy Klymenko, M. Syahman Samhan" <m.samhan@student.unsw.edu.au>
 License: MIT License
@@ -33,8 +33,6 @@ Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
-Provides-Extra: build
-Provides-Extra: dev
 License-File: LICENSE.md
 
 ## About

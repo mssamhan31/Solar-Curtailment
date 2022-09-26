@@ -1,6 +1,0 @@
-
-[build]
-build
-twine
-
-[dev]

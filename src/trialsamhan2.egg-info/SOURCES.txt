@@ -1,0 +1,10 @@
+LICENSE.md
+README.md
+pyproject.toml
+src/solarcurtailment/__init__.py
+src/solarcurtailment/solarcurtailment.py
+src/trialsamhan2.egg-info/PKG-INFO
+src/trialsamhan2.egg-info/SOURCES.txt
+src/trialsamhan2.egg-info/dependency_links.txt
+src/trialsamhan2.egg-info/top_level.txt
+test/test_solarcurtailment.py
