@@ -40,7 +40,7 @@ push            = false
         'current_version = "{version}"',
         'version = "{version}"',
     ]
-    "src/reader/__init__.py" = ["{version}"]
+    "src/__init__.py" = ["{version}"]
 
 [tool.isort]
 profile                   = "black"
