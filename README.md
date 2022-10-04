@@ -168,8 +168,8 @@ If it passes these preliminary steps, meaning it is a clear sky day with good po
 ![image](https://user-images.githubusercontent.com/110155265/193729299-a0788225-b93e-4684-a2e9-1935b4aa48c7.png)
 
 =================@ Samhan, this 2. point above is not very clear here! Can you try to explain this again?
-=================@ Baran, re-explained with more clear words
-
+=================@ Baran, re-explained with more clear words.  
+4. Add buffer for the Power Limit VWatt curve from the step 2, using 150 watt value distance. Using this step, we obtain the lower buffer and upper buffer which is illustrated below.  
 ![image](https://user-images.githubusercontent.com/110155265/193730113-f3d84452-635a-45a5-b1f6-dcfb61a924d6.png)
 
 
