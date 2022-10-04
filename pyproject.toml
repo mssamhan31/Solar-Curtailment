@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trialsamhan2"
-version = "3.0.0"
+version = "9.0.0"
 description = "Analyze solar curtailment of a certain site in a certain date"
 readme = "README.md"
 authors = [{ name = "Naomi Stringer, Baran Yildiz, Timothy Klymenko, M. Syahman Samhan", email = "m.samhan@student.unsw.edu.au" }]

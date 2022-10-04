@@ -2,9 +2,16 @@ LICENSE.md
 README.md
 pyproject.toml
 src/solarcurtailment/__init__.py
+src/solarcurtailment/clear_sky_day.py
+src/solarcurtailment/data_visualization.py
+src/solarcurtailment/energy_calculation.py
+src/solarcurtailment/file_processing.py
+src/solarcurtailment/polyfit.py
 src/solarcurtailment/solarcurtailment.py
+src/solarcurtailment/tripping_curt.py
+src/solarcurtailment/vvar_curt.py
+src/solarcurtailment/vwatt_curt.py
 src/trialsamhan2.egg-info/PKG-INFO
 src/trialsamhan2.egg-info/SOURCES.txt
 src/trialsamhan2.egg-info/dependency_links.txt
 src/trialsamhan2.egg-info/top_level.txt
-test/test_solarcurtailment.py
