@@ -165,17 +165,15 @@ If it passes these preliminary steps, meaning it is a clear sky day with good po
 1. Determine the threshold voltage value, for example, 235 V
 2. Form a V-Watt response curve with the corresponding threshold value. For example, if we have 235 V as the threshold value, the maximum real power starts decreases linearly until 265 V, where the real power limit is 20%. We call this curve as Power Limit VWatt.
 3. Find datapoints where the expected real power is higher than the Power Limit VWatt. It means there is a possibility of curtailment in these datapoints. We call this points as suspect data. The visualization can be seen below. 
-![image](https://user-images.githubusercontent.com/110155265/193729299-a0788225-b93e-4684-a2e9-1935b4aa48c7.png)
+![image](https://user-images.githubusercontent.com/110155265/193739423-4d9e537d-936b-44ea-8112-2805ab6848e3.png)
 
 =================@ Samhan, this 2. point above is not very clear here! Can you try to explain this again?
 =================@ Baran, re-explained with more clear words.  
 4. Add buffer for the Power Limit VWatt curve from the step 2, using 150 watt value distance. Using this step, we obtain the lower buffer and upper buffer which is illustrated below.  
-![image](https://user-images.githubusercontent.com/110155265/193730113-f3d84452-635a-45a5-b1f6-dcfb61a924d6.png)
-
-
+![image](https://user-images.githubusercontent.com/110155265/193739479-c1d57c00-d000-4759-93f1-6ae82ba45af0.png)
 
 5.	Then, we count the percentage of datapoints in the suspect data which lie in the buffer range of the V-Watt curve from step 3. The percentage, which we call compliance percentage, is calculated by dividing the number of actual real power points in the buffer range by the total number of actual real power points. If the current compliance percentage is higher than the current best percentage, we renew the best percentage value by this number.  
-![image](https://user-images.githubusercontent.com/110155265/193730191-32df164e-2998-4d33-b72c-a7474d0ee66d.png)
+![image](https://user-images.githubusercontent.com/110155265/193739516-6aa71a98-1859-4ceb-8535-4f437ca313f7.png)
 
 ================@ Samhan, this point is not clear either. We need to use better terms to explain these...
 =================@ Baran, re-explained with more clear words
