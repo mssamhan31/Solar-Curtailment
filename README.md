@@ -153,8 +153,8 @@ Unlike tripping, where tripping site must have energy curtailment, V-VAr enabled
 5.  We calculate the difference between the power production and the expected power production and if there is any discrepancy, we double check with VAr values to confirm V-VAr curtailment. It is worth to note, however, that the amount of energy curtailed in a non clear sky day are most likely overestimated. This is because no one can sure whether the curtailment is due to V-VAr response or due to cloud.
 
 ### V-Watt Response Detection
-In a V-Watt enabled site, the real power limit value will decrease linearly with increasing voltage. The illustration, taken from AS/NZS 4777 2020 is shown below. 
-![Input Data](https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/illustration_vwatt_curve.png?raw=true =100x20)  
+In a V-Watt enabled site, the real power limit value will decrease linearly with increasing voltage. The illustration, taken from AS/NZS 4777 2020 is shown below.   
+<img width="500" alt="illustration_vwatt_curve" src="https://user-images.githubusercontent.com/110155265/193739913-7682ba54-8027-4b54-a756-bba93c038d59.png">
 
 For convenience, let's call voltage where the real power starts decreasing, as threshold voltage. In the picture above, it is denoted as V3. It can vary from 235-255 V according to AS/NZS 4777 2020. The voltage will stop decreasing exactly at V4 = 265 V, where the real power limit is 20% the ac capacity of the inverter (after this voltage, inverter must trip and cease to operate). That is why we need to check the scatter plot of power with voltage, whether it matches one of the possible V-Watt curve, as the voltage threshold can vary from 235-255 V. The preliminary steps for V-Watt response detection are:
 1.	If it is not a clear sky day, it is inconclusive
