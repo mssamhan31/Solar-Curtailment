@@ -219,36 +219,6 @@ def rcount(a):
     result = without_reset - overcount
     return result
 
-def filter_sunrise_sunset(df):
-    """Filter a D-PV Time series data based on its estimated sunrise and sunset time.
-
-    Args:
-    df (df): D-PV Time series data with 'power' column
-
-    Returns:
-    sunrise (timestamp): estimated sunrise time (when power is >10 W for the first time in a day)
-    sunset (timestamp): the opened ghi data (when power is >10 W for the last time in a day)
-    df (df): filtered D-PV Time series data
-    
-    The sunrise and sunset time may be inaccurate in a cloudy morning or evening. However, it should not
-    affect the result because we only care about the power produced by the PV system. 
-    """
-    
-    LIMIT_DAY_POWER = 10
-    if df is None or len(df.index) == 0:
-        return None, None, None
-
-    tmp_df = df.loc[df['power'] > LIMIT_DAY_POWER]
-    if len(tmp_df.index) == 0:
-        return None, None, None
-
-    sunrise = tmp_df.index[0]
-    sunset = tmp_df.index[-1]
-
-    df = df.loc[df.index > sunrise]
-    df = df.loc[df.index < sunset]
-
-    return sunrise, sunset, df
 
 def filter_sunrise_sunset_2(df):
     """Filter a D-PV Time series data based on its estimated sunrise and sunset time, for Naomi's data format.

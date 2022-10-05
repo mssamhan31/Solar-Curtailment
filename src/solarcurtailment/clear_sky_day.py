@@ -75,6 +75,24 @@ def check_clear_sky_day(date, file_path):
         is_clear_sky_day = False
     return is_clear_sky_day
 
+# REMOVE SPACES AND CHECK IF VALUE NULL
+def string_to_float(string):
+    """Remove leading and trailing space, as well as check if a variable is a null.
+
+    Args:
+        string (str) : a variable that wants to be checked
+
+    Returns:
+        x (float) : convert to float if it's a number, and zero if it is a null. 
+    """
+    
+    x = string.strip()
+    if not x:
+        x = 0
+    else:
+        x = float(x)
+    return x
+
 # ADJUST FORMATE FOR TIMESTAMP STRINGS
 def get_timestamp_date_string(string):
     """Convert format from YYYY-MM to YYYY_MM. The latter is used for text to input the ghi data.
@@ -141,6 +159,33 @@ def separate_ghi_data(month, ghi):
         combined_ghi_dict[date] = df
 
     return combined_ghi_dict
+
+def days_in_month(month):
+    """Get the number of days in a certain month
+
+    Args:
+        month (int) : month number: between 1-12
+
+    Returns:
+        (int) : number of days in a certain month
+    """
+    
+    switcher = {
+        1: 31,
+        2: 29,
+        3: 31,
+        4: 30,
+        5: 31,
+        6: 30,
+        7: 31,
+        8: 31,
+        9: 30,
+        10: 31,
+        11: 30,
+        12: 31,
+    }
+    return switcher.get(month, 0)
+    
 
 # LOOK FOR FOR SUDDEN VARIATIONS IN SOLAR INSOLATION DATA WHICH INDICATES LIKELY CLOUD COVER, AS OPPOSED TO CLEAR PARABOLIC SHAPE OF CLEAR SKY DAY GHI CURVES
 def detect_clear_sky_day(ghi_df, min_max_ghi):

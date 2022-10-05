@@ -35,109 +35,6 @@ style = 'ggplot' # choose a style from the above options
 plt.style.use(style)
 
 #VWATT CURTAILMENT PROGRAM
-# REMOVE SPACES AND CHECK IF VALUE NULL
-def string_to_float(string):
-    """Remove leading and trailing space, as well as check if a variable is a null.
-
-    Args:
-        string (str) : a variable that wants to be checked
-
-    Returns:
-        x (float) : convert to float if it's a number, and zero if it is a null. 
-    """
-    
-    x = string.strip()
-    if not x:
-        x = 0
-    else:
-        x = float(x)
-    return x
-
-def days_in_month(month):
-    """Get the number of days in a certain month
-
-    Args:
-        month (int) : month number: between 1-12
-
-    Returns:
-        (int) : number of days in a certain month
-    """
-    
-    switcher = {
-        1: 31,
-        2: 29,
-        3: 31,
-        4: 30,
-        5: 31,
-        6: 30,
-        7: 31,
-        8: 31,
-        9: 30,
-        10: 31,
-        11: 30,
-        12: 31,
-    }
-    return switcher.get(month, 0)
-    
-
-    
-
-def filter_power_data_index(df):
-    """Take the time and power data from D-PV time-series data & filter out curtailment. Will be used for polyfit regression.
-
-    Args:
-    df (df): Time-series D-PV data with power column and timestamp as an index
-
-    Returns:
-    power_array (pd series): filtered power data
-    time_array (pd datetime): filtered timestamp data
-    
-    This function filter outs data point that is decreasing in the first half, and filters out data point that
-    is incerasing in the second half. That happens only if there is curtailment. 
-    """
-    
-    max_daily_power = max(df.power)
-    if len(df.loc[df['power'] == max_daily_power].index) > 1:
-        return None, None
-    
-    filter_first_half = []
-    filter_second_half = []
-    power_array = df.power
-    time_array = df.index
-    
-    halfFlag = True  # True is first half, False is second half
-    last_highest_power = 0
-    
-    for power in power_array:
-
-        # IF power IS GREATER THAN last_highest_power THEN INCLUDE power AND INCREASE last_highest_power
-        if power > last_highest_power:
-            last_highest_power = power
-            filter_first_half.append(True)
-        else:
-            filter_first_half.append(False)
-
-        if power == max_daily_power:
-            break
-            
-    last_highest_power = 0
-    
-    # PERFORM SAME FILTER ON SECOND SIDE OF POWER ARRAY
-    for power in power_array.iloc[::-1]:
-
-        if power == max_daily_power:
-            break
-
-        if power > last_highest_power:
-            last_highest_power = power
-            filter_second_half.append(True)
-        else:
-            filter_second_half.append(False)
-            
-    # COMBINE TO FILTERED SIDES
-    filter_second_half.reverse()
-    filter_array = filter_first_half + filter_second_half
-    return power_array[filter_array], time_array[filter_array]
 
 def get_telemetry_string(string):
     """Convert month and year data into format that is the same with ghi filename. 
@@ -592,90 +489,7 @@ def filter_power_data(graph_df):
     filter_array = filter_array1 + filter_array2
     return power_array[filter_array], time_array[filter_array]
 
-def filter_data_limited_gradients(power_array, time_array):
-    """Filter the power_array data so it includes only decreasing gradient (so the shape is parabolic)
 
-    Args:
-    power_array (pd series): non curtailment filtered power data
-    time_array (pd datetime): non curtailment filtered timestamp data
-
-    Returns:
-    power_array (pd series): gradient filtered power data
-    time_array (pd datetime): gradient filtered timestamp data
-    """
-
-    if power_array is None:
-        return None, None
-
-    # IN GENERAL ANLGE MUST BE BETWEEN THESE VALUES
-    ANGLE_LOWER_LIMIT = 80
-    ANGLE_UPPER_LIMIT = 90
-
-    # BUT AFTER 'CONTINUANCE_LIMIT' CONTINUOUS VALUES HAVE BEEN ACCEPTED, THE LOWER ANGLE LIMIT IS RELAXED TO THIS VALUE BELOW
-    WIDER_ANGLE_LOWER_LIMIT = 70
-    CONTINUANCE_LIMIT = 2
-
-    gradients = []
-    timeGradients = []
-    power_array = power_array.tolist()
-    time_array = time_array.tolist()
-    filter_array = []
-
-    n = len(power_array)
-    gradientsCompliance = [0] * n
-
-    runningCount = 0
-
-    for i in range(1, n):
-        g = abs(math.degrees(math.atan((power_array[i] - power_array[i - 1]) / (
-                    get_single_date_time(time_array[i]) - get_single_date_time(time_array[i - 1])))))
-
-        addFlag = False
-
-        if g > ANGLE_LOWER_LIMIT and g < ANGLE_UPPER_LIMIT:
-            addFlag = True
-            runningCount += 1
-
-        elif runningCount > CONTINUANCE_LIMIT and g > WIDER_ANGLE_LOWER_LIMIT:
-            addFlag = True
-
-        else:
-            runningCount = 0
-
-        if addFlag:
-            gradientsCompliance[i - 1] += 1
-            gradientsCompliance[i] += 1
-
-        if g > 85:
-            gradients.append(g)
-            timeGradients.append(time_array[i])
-
-    if gradientsCompliance[0] == 1 and gradientsCompliance[1] == 2:
-        filter_array.append(True)
-    else:
-        filter_array.append(False)
-
-    for i in range(1, n - 1):
-        if gradientsCompliance[i] == 2:
-            filter_array.append(True)
-        elif gradientsCompliance[i] == 1 and (gradientsCompliance[i - 1] == 2 or gradientsCompliance[i + 1] == 2):
-            filter_array.append(True)
-        else:
-            filter_array.append(False)
-
-    if gradientsCompliance[n - 1] == 1 and gradientsCompliance[n - 2] == 2:
-        filter_array.append(True)
-    else:
-        filter_array.append(False)
-    
-
-    power_array = pd.Series(power_array)
-    time_array = pd.Series(time_array)
-
-    power_array = power_array[filter_array]
-    time_array = time_array[filter_array]
-
-    return power_array, time_array
 
 # INTEGRATE POWER OUTPUT DATA OVER EACH DAY FOR COMPARISON WITH CURTAILMENT CALCUALTIONS
 def determine_total_energy_yields(month, monthly_data, site_organiser):
@@ -781,38 +595,9 @@ def change_to_timestamp(timeString):
     element = datetime.strptime(timeString,'%Y-%m-%d %H:%M:%S')
     return datetime.timestamp(element)
 
-def get_single_date_time(d):
-    """CONVERT A SINGLE STRING TIMESTAMP TO DATETIME OBJECTS
-
-    Args:
-    d (str): string timestamp
-
-    Returns:
-    daetimeobject
-    """
-    return md.date2num(datetime.strptime(d, '%Y-%m-%d %H:%M:%S'))
 
 
-def get_polyfit(x_array, y_array, functionDegree):
-    """GET POLYFIT OF DESIRED DEGREE, NEED x_array as float, not dt object
 
-    Args:
-    x_array (ndarray) : List of float unix timestamp
-    y_array (pd Series): List of power value corresponding to x_array time
-    functionDegree (int): Degree of polynomial. Quadratic functions means functionDegree = 2
-
-    Returns:
-    polyfit (np poly1d): polyfit model result, containing list of the coefficients and the constant.
-                        The first, second, and third values are coef of x^2, x, and the constant.
-    """
-     
-
-    timestamps = x_array
-    xp = np.linspace(timestamps[0], timestamps[len(timestamps) - 1], 1000) #IDK what is this for. Seems redudant.
-    z = np.polyfit(timestamps, y_array, functionDegree)
-    polyfit = np.poly1d(z)
-
-    return polyfit
 
 def filter_array(x_array, y_array, max_val, min_val):
     """FILTER ARRAY TO INCLUDE VALUES WITHIN A CERTAIN RANGE
@@ -840,21 +625,7 @@ def filter_array(x_array, y_array, max_val, min_val):
 
     return x_series[filter_arr].tolist(), y_series[filter_arr].tolist()
 
-def get_datetime_list(list_to_convert):
-    """CONVERT A LIST STRING TIMESTAMP TO DATETIME OBJECTS, THEN CONVERT IT TO FLOAT OF UNIX TIMESTAMPS.
-    
-    Args:
-    list_to_convert (pd Series) : List of time in str. Example can be time_array
 
-    Returns:
-    datenums (ndarray) : List of float unix timestamp
-    
-    This is used for polyfit preparation.
-    """
-    # 
-    dates = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in list_to_convert]
-    datenums = md.date2num(dates)
-    return datenums
 
 def get_datetime(df):
     """TRANSFORM A TIMESTAMP STRING INTO A TIMESTAMP INT VALUE (SECONDS SINCE 1970)
@@ -1443,7 +1214,21 @@ def get_expected_power(time_data, polyfit):
         
     return expected_power
 
+def get_datetime_list(list_to_convert):
+    """CONVERT A LIST STRING TIMESTAMP TO DATETIME OBJECTS, THEN CONVERT IT TO FLOAT OF UNIX TIMESTAMPS.
+    
+    Args:
+    list_to_convert (pd Series) : List of time in str. Example can be time_array
 
+    Returns:
+    datenums (ndarray) : List of float unix timestamp
+    
+    This is used for polyfit preparation.
+    """
+    # 
+    dates = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in list_to_convert]
+    datenums = md.date2num(dates)
+    return datenums
 
 def filter_curtailment(df):
     """Take the power data and row number from D-PV time-series data & filter out curtailment. Will be used for polyfit regression.
@@ -1619,7 +1404,7 @@ def check_vwatt_response(data_site, ac_cap):
             
     return vwatt_response, vwatt_curt_energy
 
-def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path, ac_cap):
+def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path, ac_cap, is_clear_sky_day):
     """Check the vwatt response and amount of curtailment due to vwatt response. 
 
     Args:
@@ -1628,6 +1413,7 @@ def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path,
         is_good_polyfit_quality (bool) : whether the certain date is a clear sky day or not
         file_path (str): file path where the data is saved
         ac_cap(int): ac capacity of the inverter value
+        is_clear_sky_day(bool): whether it is a clear sky day or not
 
     Returns:
         data_site (df) : D-PV time series data, probably better to be removed before because redundant
@@ -1636,7 +1422,8 @@ def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path,
     """
     
     #check if clear sky day. This contains redundant steps like making ghi dict for all days etc, can still be improved.
-    is_clear_sky_day = check_clear_sky_day(date, file_path) 
+    #is_clear_sky_day = check_clear_sky_day(date, file_path) 
+    
     global vwatt_data
     vwatt_data = pd.DataFrame() #this is redundant, probably remove later.
 
