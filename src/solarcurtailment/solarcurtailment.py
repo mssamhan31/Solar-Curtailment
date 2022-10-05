@@ -70,7 +70,6 @@ def compute(file_path, data_file, ghi_file):
     
     site_details, unique_cids= input_general_files(file_path)
     summary_all_samples = pd.DataFrame()
-    sample_number = 10
 
     data = pd.read_csv(file_path + data_file)
     size_is_ok = check_data_size(data)
