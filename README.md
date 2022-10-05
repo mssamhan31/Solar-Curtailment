@@ -18,7 +18,7 @@ This tool will benefit anyone who wants to study PV-Curtailment, and the improve
 ## Getting Started
 This project runs completely in python with common libraries using Jupyter Notebook. Hence, it is recommended to run the program in Jupyter Notebook as well.The package contains only one script, which is solarcurtailment. For quick start,
 1. Download all files (exluding those in monthly D-PV data folder) from [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EvguTkYy48RGiXaQE5aP1l4B2OriyWIwqvi29mUL_ReKDw?e=4ceZec) .
-2. Install the package in the terminal by using this command "pip install -i https://test.pypi.org/simple/ trialsamhan1" . This should make solarcurtailment module available to be imported. 
+2. Install the package in the terminal by using this command "pip install trialsamhan2" . This should make solarcurtailment module available to be imported. 
 3. Try running the [test script](https://github.com/mssamhan31/Solar-Curtailment/blob/Package-Implementation/test/test_solarcurtailment.ipynb), which basically input the module solarcurtailment then deploy it for some samples. Make sure to adjust the file_path variable. 
 
 The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx). 
