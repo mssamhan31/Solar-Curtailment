@@ -131,14 +131,14 @@ def display_power_voltage(data_site, date, vwatt_response, vvar_response):
     ax.set_ylim([-100, 6000])
 
     if vwatt_response == 'Yes':
-        line4 = ax.plot(data_site['power_limit_vw'], color = 'm', label = 'Power Limit VW')
+        line4 = ax.plot(data_site['power_limit_vw'], color = 'm', label = 'Power Limit V-Watt')
         #show power limit here
     elif vvar_response == 'Yes':
-        line4 = ax.plot(data_site['power_limit_vv'], color = 'm', label = 'Power Limit VVAr')
+        line4 = ax.plot(data_site['power_limit_vv'], color = 'm', label = 'Power Limit V-VAr')
         pass
         #show power limit here
 
-    ax.set_ylabel('Power (watt or VVAr)', **fontdict)
+    ax.set_ylabel('Power (watt or VAr)', **fontdict)
     ax.set_xlabel('Time in Day', **fontdict)
     ax.legend(loc = 2, prop={'size': 15})
 
