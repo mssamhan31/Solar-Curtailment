@@ -2,7 +2,7 @@
 
 
 This open source tool is written as part of RACE for 2030, Curtailment and Network Voltage Analysis Study (CANVAS) project. The development of the open source tool is supported by funding from Digital Grid Futures Institute (DGFI), University of New South Wales (UNSW). 
-This tool measures the amount of curtailed energy from a residential or commercial distributed energy resource such as distributed PV and/or battery energy storage system (BESS) via one of the following inverter power quality response modes (PQRM):
+This tool measures the amount of curtailed energy from a residential or commercial distributed energy resource such as distributed PV (D-PV) and/or battery energy storage system (BESS) via one of the following inverter power quality response modes (PQRM):
 1. Tripping (inverter cease to operate during high voltage conditions)
 2. V-VAr Response (high levels of VAr absorbtion and injection limits inverter maximum real power)
 3. V-Watt Response (inverter linearly reduces its real power output as a function of voltage conditions)
@@ -16,13 +16,13 @@ The tool uses the time-series measurements of:
 
 Through analysing the data mentioned above, this tool aims to answer the questions below:
 1.	Does the D-PV inverter trip? If so, how often? 
-2.	How much energy is energy is lost due to tripping curtailment in kWh/day?
+2.	How much energy is lost due to tripping curtailment in kWh/day?
 3.	Does the D-PV inverter show V-VAr response?
 4.	How much energy is lost due to V-VAr curtailment in kWh/day?
 5.	Does the D-PV inverter show V-Watt response?
 6.	How much energy is lost due to V-Watt curtailment in kWh/day?
 
-This tool can benefit researchers and future projects which would like to understand and quantify DER curtailment due to different PQRMs.
+This tool can benefit researchers and future projects which would like to understand and quantify Distributed Energy Resources (DER) curtailment due to different PQRMs.
 
 ## Getting Started
 
@@ -43,10 +43,7 @@ The detailed explanations of the datasets are provided in the 'solar curtailment
 Sample images for the format of D-PV and GHI data can be seen via the images below:
 ![Input Data](https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_data.PNG?raw=true)  
 
-GHI Data for a certain date: 
-===================@SAMHAN: This GHI image you show is very detailed. I think we only usem mean GHI with the relevant time-stamp data. Could you please confirm this and change the example image accordingly?
-===================@BARAN: Yes we only use the mean GHI, I meant to show the raw data without any cleaning process as the input here. I changed it into the ghi data with only mean GHI value. 
-
+GHI Data for a certain date (we showed only the relevant column):  
 <img width="400" alt="image" src="https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_ghi_cleaned.png?raw=true">
 
 Via using the input data, the tool produces 4 main outputs:
@@ -69,10 +66,8 @@ This GHI plot shows the irradiance of a certain day.
 The real power and reactive power is normalized by VA rating of the inverter, so the maximum value is 1. For a site with V-VAr response, inverter is expected to absorb/inject VAR according to it's respective V-VAr curve.
 For a site with V-Watt response, we expect a scatter of real power to reduce linearly in high voltages (as seen in the image with voltages equal or greater than 251V).
 
-### Output 4. Line plot of real power, reactive power, expected real power, power limit, and voltage vs time. 
-![image](https://user-images.githubusercontent.com/110155265/193734634-3a4eb601-5880-45a9-b6f3-f46e0c68d4d4.png)
-===================@SAMHAN, can you please update the image with V-Watt rather than VW (to be more clear...) 
-===================@BARAN, sure
+### Output 4. Line plot of real power, reactive power, expected real power, power limit, and voltage vs time.  
+![image](https://user-images.githubusercontent.com/110155265/194434048-6eebe057-1a6b-4b0e-bfe9-2055198da1da.png)  
 
 ## High Level Explanation of How The Algorithm Works
 ### Clear Sky Day Determination
@@ -81,31 +76,28 @@ We judge whether a date is a clear sky day or not based on two criterias:
 2.	The maximum GHI value is higher than a certain threshold, which must be true if there is no cloud.
 
 ### Daily Energy Generated Calculation
+We calculate this value to show how much is the actual daily energy generated. This value is shown in the summary table (output 1). The difference between this value and the expected energy generated without curtailment is the total curtailed energy.  
 To calculate the energy generation, we use the D-PV time series data and use these steps: 
-
-================================== @ Samhan, this is not correct! We should be calculating Wh energy for every 5 mins and then summing up all 5 minutely values within the day. Converting 5 minutely data to hourly resolution will significantly decrease the value of our research and curtailment algorithm as it is much coarser than 5 minutely values. I don't think this is true for any of the curtailment algorithms. I have corrected as below:
-================================== @ Baran I am not really sure how converting it to hourly data to calculate the energy generation will make any problem. In fact, I adopted your algorithm to convert it to hourly resolution. Also, some data are in 1 minute resolution not 5. More discussion: https://github.com/mssamhan31/Solar-Curtailment/issues/2 .
-
-1.	Calculate every 5 minutely energy value in Wh.
-2.	Sum all the 5 minutely energy values within the day (288 data points).
+1.	Calculate every 1 minutely energy value in Wh using the real power data value.
+2.	Sum all the 1 minutely energy values within the day.
 3.	Divide it by 1000 to convert the unit into kWh/day.
 
 ### Expected Energy Generated Calculation
-We essentially use similar process with the energy generated calculation, but we use power_expected values instead of real power value. The power_expected values are obtained using estimation method below:
+We essentially use similar process with the energy generated calculation, but we use expected power values instead of real power value. The expected power values are obtained using estimation method below:
 
 ### Estimation Method
-To obtain the power_expected value in the D-PV time series data, we use these logics:
-If it is a clear sky day: Use polyfit estimation (see below):
-If it is not a clear sky day and there is tripping curtailment: Use linear estimation (see below):
-If it is not a clear sky day and there is no tripping curtailment: Do not estimate, because we cannot be sure whether the reduction in power is due to v-var/v-watt curtailment or cloud cover. 
+To obtain the power_expected value in the D-PV time series data, we use these logics:  
+If it is a clear sky day: Use polyfit estimation (see below).  
+Else if it is not a clear sky day and there is tripping curtailment: Use linear estimation (see below).  
+Else if it is not a clear sky day and there is no tripping curtailment: Do not estimate, because we cannot be sure whether the reduction in power is due to V-VAr curtailment, V-Watt curtailment, or cloud cover.   
 
 ### Linear Estimation
 This method is only used in a non clear sky day with tripping curtailment. Major steps:
-1.	Filter the D-PV time series data into times between sunrise and sunset
-2.	Detect the zero power values, which indicates a tripping event
-3.	Detect the ramping down power values before zero values and ramping up power values after zero values, and consider them as tripping
-4.	Detect starting point and end point for each tripping point
-5.	Use points obtained from step 4 to make a linear equation of each tripping point, and use the linear equation to get the estimated power value without curtailment in every tripping timestamps
+1.	Filter the D-PV time series data into times between sunrise and sunset.
+2.	Detect the zero power values, which indicates a tripping event.
+3.	Detect the ramping down power values before zero values and ramping up power values after zero values, and consider them as tripping event as well.
+4.	Detect starting point and end point for each tripping event.
+5.	Use points obtained from step 4 to make a linear regression of each tripping event, and use the linear equation to get the estimated power value without curtailment in every tripping timestamps.
 6.	For times other than the tripping event, leave the power expected to be the same with the actual power.  
 
 Sample result can be seen below:
@@ -113,17 +105,18 @@ Sample result can be seen below:
 
 
 ### Polyfit Estimation
-This method is only used in a clear-sky day condition. To make the polyfit estimate, we first filter points to be used in the polyfit estimation. Necessary steps include:
+This method is only used in a clear-sky day condition. It is used to estimate the power expected without curtailment. To make the polyfit estimate, we first filter points to be used in the polyfit estimation. Necessary steps include:
 1.	Filter the D-PV time series data into times between sunrise and sunset. Before sunrise and after sunset, the real power value is zero, so they should not be used for the polyfit estimation. 
-2.	Filter out curtailed power values because we want the estimation fits the actual power without curtailment (D-PV is expected to generate a parabolic curve in clear sky-day conditions. This validated through observing the system throughout the year and confirm that it is not exposed to regular shading conditions). We filter the curtailed power because it does not make sense to fit the polyfit estimate with the curtailed power. The polyfit estimate is used to estimate the power expected without curtailment. 
+2.	Filter out curtailed power values because we want the estimation fits the actual power without curtailment (D-PV is expected to generate a parabolic curve in clear sky-day conditions. This is validated through observing the system throughout the year and confirm that it is not exposed to regular shading conditions). We filter the curtailed power because it does not make sense to fit the polyfit estimate with the curtailed power. The method we use:  
+a. Seperate the power data into two parts: sunrise until solar noon, and solar noon until sunset  
+b. In the first half of the data (from sunrise until solar noon), we include only increasing power value  
+c. In the second half of the data (solar noon until sunset), we invert the data so the order is from sunset to solar noon  
+d. In that second half of the data, we include only increasing power value.  
 3.	Filter to include only decreasing gradient real power value. In a parabolic curve with concavity facing downward, the slope is always decreasing. In other words, the gradient is always decreasing, meaning the second derivative is always negative. The illustration can be seen below: 
 <img width="450" alt="image" src="https://user-images.githubusercontent.com/110155265/193730666-e3ac130c-ece7-4115-a8f3-2abdbc1e4c0c.png">
 <img width="450" alt="image" src="https://user-images.githubusercontent.com/110155265/193735422-96f7466f-4734-4dbf-b4f5-802e64d87fcd.png">
 
-In this image, P3 is filtered out because it is a curtailed power data point. P6 is also filtered out because the slope from P4 to P6 is higher than P2 to P4. 
-
-=================@Samhan, this is not very clear, please be more clear with what do you mean...
-=================@Baran, sure I added more explanation and an illustration.
+In this image, P3 is filtered out because it is a curtailed power data point (step 2b). P6 is also filtered out because the slope from P4 to P6 is higher than P2 to P4 (step 3). 
  
 After filtering the points to be used in the fitting, we then proceed into:  
 4.	Convert the timestamp from datetime object into numerical values for fitting  
@@ -139,10 +132,26 @@ The method is described already in the linear estimation section. We basically s
 For a tripping case in a non clear sky day, using the linear estimation, we calculate the energy generation expected. The amount of curtailment is equal to the energy generation expected minus energy generated. For a tripping case in a clear sky day, we just replace the linear estimation by the polyfit estimation.
 
 ### V-VAr Response Detection
-If the V-VAr response of an inverter is not enabled, we expect the reactive power to be always zero and the power factor is always 1. For sites that shows VAr response, we compare their V-VAr scatter plots against the benchmark AS-NZS 4777.2 2015 and AS-NZS 4777.2 2020 V-VAr curves to decide on their V-VAR curve. We use 100 VAr as a threshold to take into account various glitches and inaccuracies in the monitoring device and circuit (i.e. VAr>100 for an inverter to be considered to absrob/inject any VArs). Please note that, due to some monitoring set-up errors, the raw VAr data needed to be divided by 60 in order to find the actual 5 minutely values
+The V-VAr response example can be seen in the picture below.  
+![image](https://user-images.githubusercontent.com/110155265/194429863-41bdbe57-6837-4825-b22c-ea899512478a.png)  
+This image is taken from AS-NZS 4777.2 2020. At low voltage, the system is injecting reactive power to the grid. At high voltage, the system is absorbing reactive power from the grid. 
 
-======================@ SAMHAN this point above is not correct. If an inverter shows more than 100 VAr it shows that it absorbs or injects some VAr but this doesn't guarantee it shows V-VAr response (VAr doesn't have to be dependent on Voltage just because it is greater than 100 VAr) I corrected this part accordingly...
-======================@ BARAN thanks for the correction! I don't know this before. I did not notice this in your script at all. Guess should edit the script later for the VVAr part. 
+If the V-VAr response of an inverter is not enabled, we expect the reactive power to be always zero and the power factor is always 1. So, our first step is to check whether the site injects or absorbs reactive power more than a certain threshold, which is 100 VAr.
+
+For a site having reactive power more than 100 VAr, we then compare their V-VAr scatter plots against some benchmarks which are V-VAr curve from SAPN TS-129, AS-NZS 4777.2 2015, ENA recommendation – 2019, and AS-NZS 4777.2 2020. We use 100 VAr as a threshold to take into account various glitches and inaccuracies in the monitoring device and circuit (i.e. VAr>100 for an inverter to be considered to absrob/inject any VArs). The comparison can be done either manually via visual inspection or using an algorithm below:
+1. Obtain the reactive power level in % for each timestamp.  
+2. Recheck and correct the polarity in case it is not valid. At low voltage, the system injects reactive power, so the polarity is positive. At high voltage, in contrast, the system absorbs reactive power, so the polarity is negative. 
+3. Filter the data points by including only the the negative, decreasing reactive power. In the V-VAr curve response, it is the line between V3 and V4. We filter it to perform linear regression and obtaining the value of V3 and V4 from the actual data point. Note that we check only this part because voltage below V2 is too low and it is never observed in the actual data.  
+4. Make a linear regression based on the filtered data points in the previous step
+5. Obtain the value of V3, which is the voltage where the regression line gives zero reactive power. 
+6. Obtian the value of V4, which is the voltage where the regression line gives minimum actual reactive power (the most negative reactive power). 
+7. Create two buffer line from the linear regression to take random error into account, which is +- 15% from the regression line result.
+8. We calculate the percentage of actual reactive power data points, which voltage is between V3 and V4, falling inside the upper and buffer lines made from the previous step.
+9. If V3 & V4 are inside the allowed range based on the 4 standards, and the percentage from step 8 is higher than 80%, we say that the site shows V-VAr response.
+The illustration can be seen below:
+![image](https://user-images.githubusercontent.com/110155265/194430964-a9d299a0-489f-4c10-b765-9759acced2fe.png)  
+
+Please note that, due to some monitoring set-up errors, the raw VAr data needed to be divided by 60 in order to find the actual one minutely values.
 
 ### V-VAr Curtailment Calculation
 Unlike tripping, where tripping site must have energy curtailment, V-VAr enabled site can have zero curtailment. This is because the real power of the inverter may not be limited in the presence of VAr and it depends on the magnitude of absorbed/injected VArs. For example for an inverter with 5 kVA limit, absorbtion of 3 kVAr leaves 4 kW real power capacity and energy is only curtailed when inverter can generate more than 4 kW which is calculated based on the GHI (i.e. expected energy generation method above). To calculate the energy curtailed due to VVAr:
@@ -157,30 +166,22 @@ In a V-Watt enabled site, the real power limit value will decrease linearly with
 <img width="500" alt="illustration_vwatt_curve" src="https://user-images.githubusercontent.com/110155265/193739913-7682ba54-8027-4b54-a756-bba93c038d59.png">
 
 For convenience, let's call voltage where the real power starts decreasing, as threshold voltage. In the picture above, it is denoted as V3. It can vary from 235-255 V according to AS/NZS 4777 2020. The voltage will stop decreasing exactly at V4 = 265 V, where the real power limit is 20% the ac capacity of the inverter (after this voltage, inverter must trip and cease to operate). That is why we need to check the scatter plot of power with voltage, whether it matches one of the possible V-Watt curve, as the voltage threshold can vary from 235-255 V. The preliminary steps for V-Watt response detection are:
-1.	If it is not a clear sky day, it is inconclusive
-2.	Else we check the polyfit quality. If the polyfit quality is not good enough, it is inconclusive as well
-3.	Else we check whether the dataset contain points where the voltage is more 235. If not, it is inconclusive because there are no points to be checked for V-Watt response
+1.	If it is not a clear sky day, it is inconclusive. This is because in a non clear sky day, we cannot be sure the decreasing value of real power is due to cloud or due to V-Watt respones.
+2.	Else we check the polyfit quality. If the polyfit quality is not good enough, it is inconclusive as well. This is because the ghi observation station can be far than the actual site location, which makes the clear sky day judgement inaccurate. In that case, it is possible for the script to detect the day as a clear sky day, but the polyfit quality is not good enough because the cloud only covers the site area and not the ghi observation station area. 
+3.	Else we check whether the dataset contain points where the voltage is more 235 V. If not, it is inconclusive because there are no points to be checked for V-Watt response, as 235 V is the minimum possible value of threshold value.  
 
 If it passes these preliminary steps, meaning it is a clear sky day with good polyfit quality and available overvoltage points, we then check the V-Watt response. For each of the possible V-Watt curve (from 235-255 V threshold voltage), we check the actual data with these steps:
 1. Determine the threshold voltage value, for example, 235 V
 2. Form a V-Watt response curve with the corresponding threshold value. For example, if we have 235 V as the threshold value, the maximum real power starts decreases linearly until 265 V, where the real power limit is 20%. We call this curve as Power Limit VWatt.
 3. Find datapoints where the expected real power is higher than the Power Limit VWatt. It means there is a possibility of curtailment in these datapoints. We call this points as suspect data. The visualization can be seen below. 
-![image](https://user-images.githubusercontent.com/110155265/193739423-4d9e537d-936b-44ea-8112-2805ab6848e3.png)
-
-=================@ Samhan, this 2. point above is not very clear here! Can you try to explain this again?
-=================@ Baran, re-explained with more clear words.  
+![image](https://user-images.githubusercontent.com/110155265/193739423-4d9e537d-936b-44ea-8112-2805ab6848e3.png)  
 4. Add buffer for the Power Limit VWatt curve from the step 2, using 150 watt value distance. Using this step, we obtain the lower buffer and upper buffer which is illustrated below.  
 ![image](https://user-images.githubusercontent.com/110155265/193739479-c1d57c00-d000-4759-93f1-6ae82ba45af0.png)
 
 5.	Then, we count the percentage of datapoints in the suspect data which lie in the buffer range of the V-Watt curve from step 3. The percentage, which we call compliance percentage, is calculated by dividing the number of actual real power points in the buffer range by the total number of actual real power points. If the current compliance percentage is higher than the current best percentage, we renew the best percentage value by this number.  
 ![image](https://user-images.githubusercontent.com/110155265/193739516-6aa71a98-1859-4ceb-8535-4f437ca313f7.png)
 
-================@ Samhan, this point is not clear either. We need to use better terms to explain these...
-=================@ Baran, re-explained with more clear words
-
 6. We do step 1-5 through all possible threshold voltage and decide which threshold voltage gives the highest compliance percentage and what is its corresponding compliance percentage value.
-================@Samhan (what do you mean by highest percentage, be more clear and specific)
-================@ Baran re-explained with more clear words
 
 We decide a certain site is a V-Watt enabled site only if the highest percentage compliance is higher than a percentage threshold, 84% and the number of actual point lying in the buffer is more than a count threshold, which is 30. 
 
@@ -197,11 +198,8 @@ If
 we decide that it is a non V-Watt enabled site. 
 
 
-================@ Samhan Please re-write this V-Watt response detection section as it is very difficult to understand. Try to use simpler sentences and terms. We can discuss further if you have any difficulty.
-=================@Baran, sure I added more explanation and illustration.
-
 ### V-Watt Curtailment Calculation
-For a V-Watt enabled site, the curtailed energy is equal to the expected energy generated subtracted by the actual energy generated. The expected energy generated and the actual energy generated are calculate by the time-series power data and time-series expected power data using the Expected Energy Generation Method by polyfit estimation mentioned below. 
+For a V-Watt enabled site, the curtailed energy is equal to the expected energy generated subtracted by the actual energy generated. The expected energy generated and the actual energy generated are calculated by the time-series power data and time-series expected power data using the Expected Energy Generation Method by polyfit estimation mentioned before. 
 
 ### Sample File Creation
 The raw time series D-PV data is from Solar Analytics which consists of a monthly data with 500 sites mixed into a file. In this tool, we analyze a specific site for a certain date. So, for testing purpose, we create sample simply by filtering the data for a certain day and certain site. 
