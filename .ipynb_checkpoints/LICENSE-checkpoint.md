@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) University of New South Wales-UNSW (please contact project lead Baran Yildiz at baran.yildiz@unsw.edu.au)
+Copyright (c) 2022 M. Syahman Samhan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
