@@ -34,10 +34,13 @@ fontdict={'fontsize': FONT_SIZE, 'fontweight' : 'bold'}
 style = 'ggplot' # choose a style from the above options
 plt.style.use(style)
 
-from polyfit import Polyfit #polyfit here is a python module
-polyfit_f = Polyfit() #polyfit here is an object with class Polyfit
+# from polyfit import Polyfit #polyfit here is a python module
+# from vwatt_curt import VWattCurt
 
-from vwatt_curt import VWattCurt
+from solarcurtailment.polyfit import Polyfit
+from solarcurtailment.vwatt_curt import VWattCurt
+
+polyfit_f = Polyfit() #polyfit here is an object with class Polyfit
 vwatt_curt = VWattCurt()
 
 # from polyfit import filter_data_limited_gradients

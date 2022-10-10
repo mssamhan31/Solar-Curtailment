@@ -6,6 +6,7 @@ src/solarcurtailment/clear_sky_day.py
 src/solarcurtailment/data_visualization.py
 src/solarcurtailment/energy_calculation.py
 src/solarcurtailment/file_processing.py
+src/solarcurtailment/other_functions.py
 src/solarcurtailment/polyfit.py
 src/solarcurtailment/solarcurtailment.py
 src/solarcurtailment/tripping_curt.py

@@ -34,8 +34,6 @@ fontdict={'fontsize': FONT_SIZE, 'fontweight' : 'bold'}
 style = 'ggplot' # choose a style from the above options
 plt.style.use(style)
 
-# from polyfit import get_datetime_list
-
 #VWATT CURTAILMENT PROGRAM
 class VWattCurt():
     """

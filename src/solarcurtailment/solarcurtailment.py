@@ -36,24 +36,24 @@ plt.style.use(style)
 
 #IMPORT FUNCTIONS 
 # for package implementatoin
-# from solarcurtailment.energy_calculation import *
-# from solarcurtailment.clear_sky_day import *
-# from solarcurtailment.tripping_curt import *
-# from solarcurtailment.vvar_curt import *
-# from solarcurtailment.vwatt_curt import *
-# from solarcurtailment.polyfit import *
-# from solarcurtailment.file_processing import *
-# from solarcurtailment.data_visualization import *
+from solarcurtailment.energy_calculation import *
+from solarcurtailment.clear_sky_day import *
+from solarcurtailment.tripping_curt import *
+from solarcurtailment.vvar_curt import *
+from solarcurtailment.vwatt_curt import *
+from solarcurtailment.polyfit import *
+from solarcurtailment.file_processing import *
+from solarcurtailment.data_visualization import *
 
 #for local package testing
-from energy_calculation import *
-from clear_sky_day import *
-from tripping_curt import *
-from vvar_curt import *
-from vwatt_curt import *
-from polyfit import *
-from file_processing import *
-from data_visualization import *
+# from energy_calculation import *
+# from clear_sky_day import *
+# from tripping_curt import *
+# from vvar_curt import *
+# from vwatt_curt import *
+# from polyfit import *
+# from file_processing import *
+# from data_visualization import *
 
 #class instantiation
 file_processing = FileProcessing()
