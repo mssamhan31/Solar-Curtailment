@@ -55,6 +55,16 @@ from polyfit import *
 from file_processing import *
 from data_visualization import *
 
+#class instantiation
+file_processing = FileProcessing()
+clear_sky_day = ClearSkyDay()
+data_visualization = DataVisualization()
+energy_calculation = EnergyCalculation()
+tripping_curt = TrippingCurt()
+polyfit_f = Polyfit()
+vvar_curt = VVarCurt()
+vwatt_curt = VWattCurt()
+
 
 def compute(file_path, data_file, ghi_file):
     ''' Compute solar curtailment from D-PV time series data of a certain site in a certain date & ghi data.
@@ -85,11 +95,12 @@ def compute(file_path, data_file, ghi_file):
         - display_power_voltage
     '''
     
-    site_details, unique_cids= input_general_files(file_path)
+    
+    site_details, unique_cids= file_processing.input_general_files(file_path)
     summary_all_samples = pd.DataFrame()
 
     data = pd.read_csv(file_path + data_file)
-    size_is_ok = check_data_size(data)
+    size_is_ok = file_processing.check_data_size(data)
     if not size_is_ok:
         print('Cannot analyze this sample due to incomplete data.')
     else:
@@ -102,24 +113,24 @@ def compute(file_path, data_file, ghi_file):
         c_id = data['c_id'][0]
         date = str(data.index[0])[:10]
 
-        data_site, ac_cap, dc_cap, EFF_SYSTEM, inverter = site_organize(c_id, site_details, data, unique_cids)
-        data_site = resample_in_minute(data_site)
+        data_site, ac_cap, dc_cap, EFF_SYSTEM, inverter = vvar_curt.site_organize(c_id, site_details, data, unique_cids)
+        data_site = file_processing.resample_in_minute(data_site)
 
         #check the expected power using polyfit
-        data_site, polyfit, is_good_polyfit_quality = check_polyfit(data_site, ac_cap)
+        data_site, polyfit, is_good_polyfit_quality = polyfit_f.check_polyfit(data_site, ac_cap)
         #data_site, a, is_good_polyfit_quality = check_polyfit_constrained(data_site, ac_cap)
 
-        is_clear_sky_day = check_clear_sky_day(date, file_path)
-        tripping_response, tripping_curt_energy, estimation_method, data_site = check_tripping_curtailment(is_clear_sky_day, c_id, data_site, unique_cids, ac_cap, site_details, date)    
-        energy_generated, data_site = check_energy_generated(data_site, date, is_clear_sky_day, tripping_curt_energy)
-        vvar_response, vvar_curt_energy, data_site = check_vvar_curtailment(c_id, date, data_site, ghi, ac_cap, dc_cap, EFF_SYSTEM, is_clear_sky_day)
-        data_site, vwatt_response, vwatt_curt_energy = check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path, ac_cap, is_clear_sky_day)
+        is_clear_sky_day = clear_sky_day.check_clear_sky_day(date, file_path)
+        tripping_response, tripping_curt_energy, estimation_method, data_site = tripping_curt.check_tripping_curtailment(is_clear_sky_day, c_id, data_site, unique_cids, ac_cap, site_details, date)    
+        energy_generated, data_site = energy_calculation.check_energy_generated(data_site, date, is_clear_sky_day, tripping_curt_energy)
+        vvar_response, vvar_curt_energy, data_site = vvar_curt.check_vvar_curtailment(c_id, date, data_site, ghi, ac_cap, dc_cap, EFF_SYSTEM, is_clear_sky_day)
+        data_site, vwatt_response, vwatt_curt_energy = vwatt_curt.check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path, ac_cap, is_clear_sky_day)
 
-        energy_generated_expected, estimation_method = check_energy_expected(energy_generated, tripping_curt_energy, vvar_curt_energy, vwatt_curt_energy, is_clear_sky_day)
+        energy_generated_expected, estimation_method = energy_calculation.check_energy_expected(energy_generated, tripping_curt_energy, vvar_curt_energy, vwatt_curt_energy, is_clear_sky_day)
 
-        summary = summarize_result_into_dataframe(c_id, date, is_clear_sky_day, energy_generated, energy_generated_expected, estimation_method, tripping_response, tripping_curt_energy, vvar_response, vvar_curt_energy, vwatt_response, vwatt_curt_energy)
+        summary = file_processing.summarize_result_into_dataframe(c_id, date, is_clear_sky_day, energy_generated, energy_generated_expected, estimation_method, tripping_response, tripping_curt_energy, vvar_response, vvar_curt_energy, vwatt_response, vwatt_curt_energy)
 
         display(summary)
-        display_ghi(ghi, date)
-        display_power_scatter(data_site, ac_cap)
-        display_power_voltage(data_site, date, vwatt_response, vvar_response)
+        data_visualization.display_ghi(ghi, date)
+        data_visualization.display_power_scatter(data_site, ac_cap)
+        data_visualization.display_power_voltage(data_site, date, vwatt_response, vvar_response)
