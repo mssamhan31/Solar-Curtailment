@@ -34,22 +34,18 @@ fontdict={'fontsize': FONT_SIZE, 'fontweight' : 'bold'}
 style = 'ggplot' # choose a style from the above options
 plt.style.use(style)
 
+# LOCAL TEST
 # from polyfit import Polyfit #polyfit here is a python module
 # from vwatt_curt import VWattCurt
 
+#PACKAGE IMPLEMENTATION TEST
 from solarcurtailment.polyfit import Polyfit
 from solarcurtailment.vwatt_curt import VWattCurt
+
 
 polyfit_f = Polyfit() #polyfit here is an object with class Polyfit
 vwatt_curt = VWattCurt()
 
-# from polyfit import filter_data_limited_gradients
-# from polyfit import get_datetime_list
-# from polyfit import get_polyfit
-
-
-# from vwatt_curt import slice_end_off_df
-# from vwatt_curt import filter_power_data
 
 #VVAR CURTAILMENT PROGRAM
 class VVarCurt():
@@ -163,10 +159,84 @@ class VVarCurt():
         data_curtailment = data_site_complete[curt_criteria]  # investigate curtailment only for the instances which satisfy above criteria 
         ghi_curtailment = ghi[curt_criteria]
 
-        if not var_criteria.any():
+        is_inject_or_absorb = (data_site['reactive_power'].abs() > 100).any()
+        if not is_inject_or_absorb:
             vvar_response = 'None'
         else:
-            vvar_response = 'Yes'
+            # OBTAIN REACTIVE POWER LEVEL IN %
+            data_site['q_level_percent'] = data_site['reactive_power'] / ac_cap * 100
+
+            # RECHECK AND CORRECT THE POLARITY
+            filter_more_235 = data_site['voltage'] > 235
+            polarity_wrong = data_site.loc[filter_more_235, 'q_level_percent'].sum() > 0
+            if polarity_wrong:
+                data_site.loc[filter_more_235, 'q_level_percent'] = - data_site.loc[filter_more_235, 'q_level_percent']
+
+            # CHECK HOW IT LOOKS LIKE VVAR CURVE
+
+            #    OBTAIN THE LINEAR EQ
+            #      Filter out the zeros and the minimum q level
+            minimum_q_level = data_site['q_level_percent'].min()
+            ERROR_PERCENT = 5
+            filter_zero = data_site['q_level_percent'] < - ERROR_PERCENT
+            filter_minimum = data_site['q_level_percent'] > minimum_q_level + ERROR_PERCENT
+            filter_for_linreg = filter_zero & filter_minimum
+
+            data_site['q_level_forreg'] = data_site.loc[filter_for_linreg, 'q_level_percent']
+
+            try:
+                #      Perform linear regression
+                from sklearn.linear_model import LinearRegression
+
+                X = np.array(data_site.loc[filter_for_linreg, 'voltage']).reshape(-1, 1)  # values converts it into a numpy array
+                Y = np.array(data_site.loc[filter_for_linreg, 'q_level_percent']).reshape(-1, 1)  # -1 means that calculate the dimension of rows, but have 1 column
+                all_voltage = np.array(data_site['voltage']).reshape(-1, 1)
+
+                linear_regressor = LinearRegression()  # create object for the class
+                linear_regressor.fit(X, Y)  # perform linear regression
+                data_site['q_level_regresult'] = linear_regressor.predict(all_voltage)  # make predictions
+
+                data_site.loc[data_site['q_level_regresult'] > 0, 'q_level_regresult'] = float('nan')
+                data_site.loc[data_site['q_level_regresult'] < minimum_q_level, 'q_level_regresult'] = float('nan')
+
+                #    GET V3, V4
+                V3 = (data_site.loc[data_site['q_level_regresult'] == data_site['q_level_regresult'].max(), 'voltage']).mean()
+
+                V4 = (data_site.loc[data_site['q_level_regresult'] == data_site['q_level_regresult'].min(), 'voltage']).mean()
+
+                BUFFER_VAR_PERCENT = 15
+
+                decreasing_var = data_site.loc[data_site['q_level_regresult'].notna(), ['voltage', 'q_level_percent', 'q_level_regresult']]
+                decreasing_var['upper_buffer'] = decreasing_var['q_level_regresult'] + BUFFER_VAR_PERCENT
+                decreasing_var['lower_buffer'] = decreasing_var['q_level_regresult'] - BUFFER_VAR_PERCENT
+
+                #    CHECK PERCENTAGE COMPLIANCE
+                is_low_ok = decreasing_var['lower_buffer'] < decreasing_var['q_level_percent']
+                is_upp_ok = decreasing_var['q_level_percent'] < decreasing_var['upper_buffer']
+                decreasing_var['is_in_buffer_range'] = is_low_ok & is_upp_ok
+                count_in_buffer_range = decreasing_var['is_in_buffer_range'].values.sum() #count true in a col
+
+                percentage_in_buffer_range = float(count_in_buffer_range) / float(len(decreasing_var.index)) * 100
+                PERCENTAGE_THRESHOLD = 80
+
+                # This is according to the combined range from SAPN TS-129, AS/NZS 4777-2015, ENA recommendation - 2019, and
+                # AS/NZS 4777 - 2020 (Australia B - small sytems) with 1.5 margin to take random error into account.
+                V3_LOWER_LIMIT = 233.5
+                V3_UPPER_LIMIT = 251.5
+                V4_LOWER_LIMIT = 251.5
+                V4_UPPER_LIMIT = 269.5
+
+                compliance_percent = percentage_in_buffer_range > PERCENTAGE_THRESHOLD
+                compliance_v3 = V3_LOWER_LIMIT < V3 < V3_UPPER_LIMIT 
+                compliance_v4 = V4_LOWER_LIMIT < V4 < V4_UPPER_LIMIT 
+
+                if compliance_percent & compliance_v3 & compliance_v4:
+                    vvar_response = 'Yes'
+                else:
+                    vvar_response = 'None'
+                    
+            except:
+                vvar_response = 'None'
 
         # max_real_power refers to what the system could generate if it wasn't curtailed
         #ISSUES FOR TROUBLESHOOTING LATER: SOMETIME MAX POWER IS LESS THAN POWER?
