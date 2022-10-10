@@ -66,6 +66,23 @@ def compute(file_path, data_file, ghi_file):
 
     Returns:
         None, but displaying summary of curtailment analysis, ghi plot, power scatter plot, and power lineplot.
+        
+    Functions needed:
+        - input_general_files
+        - check_data_size
+        - site_organize
+        - resample_in_minute
+        - check_polyfit
+        - check_clear_sky_day
+        - check_tripping_curtailment
+        - check_energy_generated
+        - check_vvar_curtailment
+        - check_vwatt_curtailment
+        - check_energy_expected
+        - summarize_result_into_dataframe
+        - display_ghi
+        - display_power_scatter
+        - display_power_voltage
     '''
     
     site_details, unique_cids= input_general_files(file_path)

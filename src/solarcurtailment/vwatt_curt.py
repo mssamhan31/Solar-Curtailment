@@ -114,8 +114,9 @@ def organise_sites(clear_sky_days, site_id_list, month, inverter_telemetry, site
                                     values are site (a variable with object Site)
     
     Functions required:
-    Overall_site_organiser
+    organise_individual_site
     """
+    
     overall_site_organiser = {}
 
     for site_id in site_id_list:
@@ -130,7 +131,7 @@ def organise_sites(clear_sky_days, site_id_list, month, inverter_telemetry, site
 
 
 def organise_individual_site(clear_sky_days, site_id, month, inverter_telemetry, site_details, cicuit_details):
-    """filter D-PV data for only a certain date.
+    """Organise c_id data into site class
 
     Args:
     clear_sky_days (list) : List of clear sky days of a certain month
@@ -162,7 +163,7 @@ def organise_individual_site(clear_sky_days, site_id, month, inverter_telemetry,
 
 
 def organise_individual_circuit(clear_sky_days, c_id, site_id, month, inverter_telemetry, con_type, polarity):
-    """filter D-PV data for only a certain date.
+    """organise circuit data into circuit class
 
     Args:
     clear_sky_days (list) : List of clear sky days of a certain month
@@ -302,6 +303,9 @@ def assess_volt_watt_behaviour_site(site, clear_sky_days, overall_volt_watt_dict
 
     Returns:
         None, but it will modify site object by appending circuit data into it.
+        
+    Functions needed:
+    assess_volt_watt_behaviour_circuit
     """
     
     for c_id in site.c_id_data.keys():
@@ -320,6 +324,10 @@ def assess_volt_watt_behaviour_circuit(circuit, clear_sky_days, dc_cap_w, ac_cap
 
     Returns:
         None, but it will modify overall_volt_watt_dict by appending its values. v and p are points in the VWatt curve buffer.
+        
+    Functions needed:
+    - append_volt_watt_behaviour_data
+    - display_day
     """
     
     for date in clear_sky_days:
@@ -349,6 +357,16 @@ def append_volt_watt_behaviour_data(df, c_id, date, dc_cap_w):
         relative_watt_array_compliance (list) : list of relative_watt_array in the buffer range
         filtered_time_array (list) : list of time filtered by removing outliers
         filtered_power_array (list) : list of power filtered by removing outliers
+        
+    Functions needed:
+    - slice_end_off_df
+    - filter_power_data
+    - filter_data_limited_gradients
+    - get_polyfit
+    - filter_array
+    - change_w_to_kw
+    - determine_compliance
+    - get_max_volt_watt_curve
     """
     
     if df is None:
@@ -527,6 +545,9 @@ def calculate_months_energy_yield(c_id, monthly_data):
 
     Returns:
     measured_energy (float) : Amount of energy generation in that month in kWh
+    
+    Functions needed:
+    - area_under_curve
 
     May be applicable for daily application if the monthly data is already filtered into only certain date.
     """
@@ -680,6 +701,10 @@ def determine_compliance(polyfit, graph_df, max_power, vwLimit):
                                     which experience VWatt curtailment
         successfull_relative_watt_array (list) : list of relative_watt_array in the buffer range
         successful_volt_array (list) : list of volt_array in the buffer range
+        
+    Functions needed:
+        - get_single_date_time
+        - volt_watt_curve
     """
     
 
@@ -773,7 +798,12 @@ def get_max_volt_watt_curve(max_power, graph_df, vwLimit):
     Returns:
         max_volt_watt_time_array (list) : list of time
         max_volt_watt_power_array (list) : list of maximum allowed power (in kW) for time in max_volt_watt_time_array
+        
+    Functions needed:
+        - get_single_date_time
+        - volt_watt_curve
     """
+    
     max_volt_watt_time_array = []
     max_volt_watt_power_array = []
 
@@ -799,6 +829,9 @@ def overall_volt_watt_assessment(overall_volt_watt_dict, complaincePercentageLim
         
     Returns:
         None, but summarize the VWatt sites, Non VWatt sites, and inconclusive sites count.
+        
+    Functions needed:
+        - site_volt_watt_assessment
     """
     
     best_vw_limit = 248
@@ -885,6 +918,12 @@ def display_day(c_id, date, df, dc_cap_w, volt_array, relative_watt_array, filte
     Returns:
         None
     
+    Functions needed:
+        - get_max_volt_watt_curve
+        - get_sample_voltages
+        - get_watts_curve
+        - get_watts_curve_buffer
+    
     Side effects:
         Show 2 plots. First plot is time series plot, second plot is power vs voltage plot. 
     """
@@ -957,6 +996,10 @@ def get_watts_curve(vwLimit):
         
     Returns:
         curve (array): voltage and its corresponding maximum power limit.
+        
+    Functions needed:
+        - get_sample_voltages
+        - volt_watt_curve
     """
     
     curve = []
@@ -996,6 +1039,9 @@ def site_volt_watt_assessment(c_id, site_volt_watt_dict, complaincePercentageLim
     Returns:
         (bool) : True if VWatt, False if not VWatt, None if inconclusive due to 
                 either not enough point or not enough overvoltage data.
+                
+    Functions needed:
+        determine_volt_watt_scatter_compliance
     """
     
     best_compliance_count = 0
@@ -1076,6 +1122,11 @@ def determine_volt_watt_scatter_compliance(vwLimit, originalVoltArray, originalR
         relative_watt_array (list) : filtered relative power
         successfull_relative_watt_array (list) : relative power in the VW curve buffer range
         successful_volt_array (list) : voltage in the VW curve buffer range
+        
+    Functions needed:
+        - filter_array
+        - volt_watt_curve
+        
     """
     
     compliance_count = 0
@@ -1335,7 +1386,10 @@ def check_vwatt_response(data_site, ac_cap):
 
     Returns:
         vwatt_response (str) : Yes, None, or Inconclusive due to insufficient overvoltage datapoint.
-        
+    
+    Functions needed:
+        - volt_watt_curve
+    
     TODO: 
     1. Reassess whether it is necessary to determine VWatt using count and gradient threshold
     2. Test for non VWatt sample & inconclusive sample
@@ -1419,6 +1473,10 @@ def check_vwatt_curtailment(data_site, date, is_good_polyfit_quality, file_path,
         data_site (df) : D-PV time series data, probably better to be removed before because redundant
         vwatt_response (str) : Yes, None, or Inconclusive due to insufficient overvoltage datapoint.
         vwatt_curt_energy (float) : The amount of energy curtailed due to V-Watt response. 
+        
+    Functions needed:
+        - check_overvoltage_avail
+        - check_vwatt_response
     """
     
     #check if clear sky day. This contains redundant steps like making ghi dict for all days etc, can still be improved.

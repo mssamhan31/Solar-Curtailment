@@ -54,7 +54,6 @@ def check_polyfit(data_site, ac_cap):
     - filter_data_limited_gradients
     - get_datetime_list
     - get_polyfit
-    - 
     """
     data_site.index.rename('ts', inplace = True)
 
@@ -141,6 +140,9 @@ def filter_data_limited_gradients(power_array, time_array):
     Returns:
     power_array (pd series): gradient filtered power data
     time_array (pd datetime): gradient filtered timestamp data
+    
+    Funcitons needed:
+    - get_single_date_time
     """
 
     if power_array is None:
@@ -363,6 +365,13 @@ def check_polyfit_constrained(data, ac_cap):
     data (df) : D-PV time series data, filtered sunrise sunset, added with 'power_expected' column and 'power_relative' column
     a (list) : polyfit result in terms of the coefficient of x^2, x, and the constant
     is_good_polyfit_quality (bool) : whether the polyfit quality is good enough or not.
+    
+    functions needed:
+    - filter_sunrise_sunset
+    - filter_curtailment
+    - func
+    - sum_squared_error
+    
     """
     
     from scipy.optimize import minimize

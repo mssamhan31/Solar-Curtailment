@@ -37,7 +37,6 @@ plt.style.use(style)
 #ENERGY GENERATED CALCULATION
 def check_energy_generated(data_site, date, is_clear_sky_day, tripping_curt_energy):
     """Get the amount of energy generated in a certain site in a certain day, unit kWh.
-    energy_generated, energy_generated_expected, estimation_method = check_energy_generated(data_site, date, is_clear_sky_day)
 
     Args:
         data_site (df): Cleaned D-PV time-series data, output of site_orgaize function

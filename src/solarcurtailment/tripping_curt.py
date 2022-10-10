@@ -269,6 +269,11 @@ def check_tripping_curtailment(is_clear_sky_day, c_id, data_site, unique_cids, a
                              some criterias. Otherwise always use linear.
     data_site (df): D-PV time series data with a new column: 'power_expected_linear' which is the estimated power 
                     production without curtailment, estimated using linear method. 
+                    
+    Functions needed:
+    - filter_sunrise_sunset_2
+    - calculate_first_derivative_of_variable
+
     
 
     Some parts are modified to be compatible for SolA dataset input and implementation
