@@ -1,3 +1,40 @@
+#IMPORT PACKAGES
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import datetime as dt
+import pytz #for timezone calculation
+import math
+import matplotlib.dates as md
+import gc
+import os
+from datetime import datetime
+import calendar
+import seaborn as sns; sns.set()
+import itertools
+#import datetime
+from time import gmtime, strftime
+from matplotlib import cm
+from IPython.display import display
+#%matplotlib qt
+#%matplotlib inline
+
+#SET GLOBAL PARAMETERS
+# ================== Global parameters for fonts & sizes =================
+FONT_SIZE = 20
+rc={'font.size': FONT_SIZE, 'axes.labelsize': FONT_SIZE, 'legend.fontsize': FONT_SIZE, 
+    'axes.titlesize': FONT_SIZE, 'xtick.labelsize': FONT_SIZE, 'ytick.labelsize': FONT_SIZE}
+plt.rcParams.update(**rc)
+plt.rc('font', weight='bold')
+ 
+# For label titles
+fontdict={'fontsize': FONT_SIZE, 'fontweight' : 'bold'}
+# can add in above dictionary: 'verticalalignment': 'baseline' 
+
+style = 'ggplot' # choose a style from the above options
+plt.style.use(style)
+
+
 # This file consists of some functions which are not used, but we keep it just in case
 
 #from EnergyCalculation
