@@ -250,7 +250,9 @@ class Polyfit():
 
         max_daily_power = max(df.power)
         if len(df.loc[df['power'] == max_daily_power].index) > 1:
-            return None, None
+            first_time_highest = str(df.loc[df['power'] == max_daily_power].index[0])
+            df.loc[first_time_highest, 'power'] += 1
+            max_daily_power = max(df.power)
 
         filter_first_half = []
         filter_second_half = []

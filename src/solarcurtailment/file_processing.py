@@ -112,9 +112,13 @@ class FileProcessing():
 
         MIN_LEN = 1000
         if len(data) > MIN_LEN:
-            size_is_ok = True
+            if (data['power'] > 0).any(): #also check whether it contains positive value.
+                size_is_ok = True
+            else:
+                size_is_ok = False
         else:
             size_is_ok = False
+            
         return size_is_ok
 
     def resample_in_minute(self, data):

@@ -106,6 +106,9 @@ class VVarCurt():
         # Apparent power of the inverter
         data_site['va'] = np.sqrt (data_site['power'].values**2 + data_site['reactive_power'].values**2)
         data_site['pf'] = data_site['power']/data_site['va']
+        
+        # Drop duplicates
+        data_site = data_site.drop_duplicates(keep='first')
 
         return data_site, ac_cap, dc_cap, EFF_SYSTEM, inverter
 
