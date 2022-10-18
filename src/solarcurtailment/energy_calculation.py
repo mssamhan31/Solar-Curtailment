@@ -66,7 +66,8 @@ class EnergyCalculation():
         energy_generated = data_site.loc[date_idx, 'power'].resample('h').mean().sum()/1000
 
         if not is_clear_sky_day:
-            data_site['power_expected'] = data_site['power_expected_linear']
+            if tripping_curt_energy > 0:
+                data_site['power_expected'] = data_site['power_expected_linear']
 
         return energy_generated, data_site
 

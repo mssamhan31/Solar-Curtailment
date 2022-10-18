@@ -112,8 +112,11 @@ class FileProcessing():
 
         MIN_LEN = 1000
         if len(data) > MIN_LEN:
-            if (data['power'] > 0).any(): #also check whether it contains positive value.
-                size_is_ok = True
+            if (data['power'].abs() > 300).any(): #also check whether it contains power more than 300.
+                if ((data.index.hour >= 7) & (data.index.hour <= 17)).sum() > 0: #there must be datapoint between 7 and 17
+                    size_is_ok = True
+                else:
+                    size_is_ok = False
             else:
                 size_is_ok = False
         else:
