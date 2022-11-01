@@ -100,15 +100,16 @@ def compute(file_path, data_file, ghi_file):
     summary_all_samples = pd.DataFrame()
 
     data = pd.read_csv(file_path + data_file)
+    pd.to_datetime(data['Timestamp'].str.slice(0, 19, 1))
+    data['Timestamp'] = pd.to_datetime(data['Timestamp'].str.slice(0, 19, 1))
+    data.set_index('Timestamp', inplace=True)
+
     size_is_ok = file_processing.check_data_size(data)
     if not size_is_ok:
         print('Cannot analyze this sample due to incomplete data.')
     else:
         ghi = pd.read_csv(file_path + ghi_file, index_col = 0)
         ghi.index = pd.to_datetime(ghi.index)
-        pd.to_datetime(data['Timestamp'].str.slice(0, 19, 1))
-        data['Timestamp'] = pd.to_datetime(data['Timestamp'].str.slice(0, 19, 1))
-        data.set_index('Timestamp', inplace=True)
 
         c_id = data['c_id'][0]
         date = str(data.index[0])[:10]

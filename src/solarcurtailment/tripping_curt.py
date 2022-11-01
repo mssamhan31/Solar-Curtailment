@@ -130,9 +130,15 @@ class TrippingCurt():
 
         sunrise = tmp_df.index[0]
         sunset = tmp_df.index[-1]
+        
+#         if df['power_kW'][0] > LIMIT_DAY_POWER/1000:
+#             sunrise = df.index[0]
+#         if df['power_kW'][-1] > LIMIT_DAY_POWER/1000:
+#             sunset = df.index[-1]
+        
 
-        df = df.loc[df.index > sunrise]
-        df = df.loc[df.index < sunset]
+        df = df.loc[df.index >= sunrise]
+        df = df.loc[df.index <= sunset]
 
         return sunrise, sunset, df
 

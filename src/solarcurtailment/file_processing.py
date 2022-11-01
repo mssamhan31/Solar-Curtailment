@@ -101,18 +101,20 @@ class FileProcessing():
         })
         return summary
 
-    def check_data_size(self, data):
+    def check_data_size(self, data, ac_cap):
         """Check whether the D-PV time series data has normal size, where we assume the resolution of the timestamp is 60 s or smaller. 
         Args:
             data (df): D-PV time series data
 
         Returns:
-            size_is_ok (bool): True if more the data length is more than 1000, else false. 
+            size_is_ok (bool): True if more the data makes sense
         """
-
-        MIN_LEN = 1000
+        
+        VERY_LOW_OUTPUT_AVE_PERCENTAGE_CAPACITY = 0.05
+        MIN_LEN = 2 #before is 10
+        
         if len(data) > MIN_LEN:
-            if (data['power'].abs() > 300).any(): #also check whether it contains power more than 300.
+            if (data['power'].abs() > VERY_LOW_OUTPUT_AVE_PERCENTAGE_CAPACITY * ac_cap).any(): #500 worked just in case.
                 if ((data.index.hour >= 7) & (data.index.hour <= 17)).sum() > 0: #there must be datapoint between 7 and 17
                     size_is_ok = True
                 else:
