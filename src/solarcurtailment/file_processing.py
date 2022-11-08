@@ -61,7 +61,7 @@ class FileProcessing():
         circuit_details = pd.read_csv(file_path + r"/unsw_20190701_circuit_details.csv")
         site_details = pd.read_csv (file_path + r"/unsw_20190701_site_details.csv")
         site_details = site_details.merge(circuit_details, left_on = 'site_id', right_on = 'site_id')
-        unique_cids = pd.read_csv(file_path + r"/UniqueCids.csv", index_col = 0)
+        unique_cids = pd.read_csv(file_path + r"/UniqueCids500.csv", index_col = 0)
         return site_details, unique_cids
 
     def summarize_result_into_dataframe(self, c_id, date, is_clear_sky_day, energy_generated, energy_generated_expected, estimation_method, tripping_response, tripping_curt_energy, vvar_response, vvar_curt_energy, vwatt_response, vwatt_curt_energy):
