@@ -30,8 +30,8 @@ This project runs completely in python with common libraries using Jupyter Noteb
 
 For quick start,
 1. Download all the required data file and keep it into a certain folder. All the required data files are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EvguTkYy48RGiXaQE5aP1l4B2OriyWIwqvi29mUL_ReKDw?e=4ceZec). Files inside the monthly D-PV or monthly GHI data are not needed. The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx). 
-2. Install Solar-Curtailment package in terminal using "pip install trialsamhan2==25.0.0" (we will replace trialsamhan2 name with solarcurtailment after the stable version is finished). This is then imported in the script using "from solarcurtailment import curtailment_calculation"
-3. Adopt the script in the "test" folder, 'test_solarcurtailment.ipynb' and edit the file_path in accordance with the place you save the data files.
+2. Install Solar-Curtailment package in terminal using "pip install solarcurtailment". This is then imported in the script using "from solarcurtailment import curtailment_calculation"
+3. Adopt the script in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/test/test_solarcurtailment.ipynb), and edit the file_path in accordance with the place you save the data files.
 
 ## Demonstration of the tool use
 Currently, the tool can only be demonstrated for D-PV systems as the BESS dataset is confidential as per the non-disclosure agreement (NDA) between project partners. The authors are working to obtain BESS data samples that can be used for the demonstration of the tool.
