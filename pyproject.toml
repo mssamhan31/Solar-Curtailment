@@ -3,8 +3,8 @@ requires      = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "trialsamhan2"
-version = "51.0.0"
+name = "solarcurtailment"
+version = "1.0.0"
 description = "Analyze solar curtailment of a certain site in a certain date"
 readme = "README.md"
 authors = [{ name = "Naomi Stringer, Baran Yildiz, Timothy Klymenko, M. Syahman Samhan", email = "m.samhan@student.unsw.edu.au" }]
