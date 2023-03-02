@@ -38,7 +38,7 @@ plt.style.use(style)
 # from polyfit import Polyfit #polyfit here is a python module
 # from vwatt_curt import VWattCurt
 
-#PACKAGE IMPLEMENTATION TEST
+# #PACKAGE IMPLEMENTATION TEST
 from solarcurtailment.polyfit import Polyfit
 from solarcurtailment.vwatt_curt import VWattCurt
 
@@ -62,7 +62,7 @@ class VVarCurt():
 
         Args:
             c_id_idx (int): c_id value
-            site_details (df): site_details dataframe from unsw_20190701_site_details.csv file
+            site_details (df): site_details dataframe from details_site_id.csv file
             data (df): D-PV time-series dataframe from input_monthly_file function output
             unique_cids (df): Dataframe listing unique c_id's and their corresponding site_id
 
@@ -80,7 +80,8 @@ class VVarCurt():
         polarity = site_details.loc[site_details['c_id'] == c_id, 'polarity'].values[0] # get the polarity of the site
         ac_cap = site_details.loc[site_details['c_id'] == c_id, 'ac_cap_w'].values[0]
         dc_cap = site_details.loc[site_details['c_id'] == c_id, 'dc_cap_w'].values[0]
-        inverter = site_details.loc[site_details['c_id'] == c_id, 'inverter_manufacturer'].values[0] + ' ' + site_details.loc[site_details['c_id'] == c_id, 'inverter_model'].values[0]
+        #inverter = site_details.loc[site_details['c_id'] == c_id, 'inverter_manufacturer'].values[0] + ' ' + site_details.loc[site_details['c_id'] == c_id, 'inverter_model'].values[0]
+        inverter = 'information is unavailable'
 
         # Extract single site data and organize: 
         data_site = data[data['c_id'] == c_id].sort_index() # get the monthly data of the specific c_id

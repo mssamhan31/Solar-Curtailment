@@ -151,7 +151,7 @@ class TrippingCurt():
         data_site (df): Cleaned D-PV time-series data, output of site_organize function
         unique_cids (df): Unique c_id and site_id data
         ac_cap (float): Inverter capacity in watt
-        site_details (df): Site data from unsw_20190701_site_details.csv and unsw_20190701_circuit_details.csv
+        site_details (df): Site data from details_site_id.csv and details_c_id.csv
         date (str): Date in YYYYMMDD
 
         Returns:
@@ -204,8 +204,8 @@ class TrippingCurt():
             'power_kW' : data_site['power']/1000,
             'reactive_power' : data_site['reactive_power'],
             'clean' : 'cleaned',
-            'manufacturer' : site_details.loc[site_details['c_id'] == c_id, 'inverter_manufacturer'].iloc[0],
-            'model' : site_details.loc[site_details['c_id'] == c_id, 'inverter_model'].iloc[0],
+            #'manufacturer' : site_details.loc[site_details['c_id'] == c_id, 'inverter_manufacturer'].iloc[0],
+            #'model' : site_details.loc[site_details['c_id'] == c_id, 'inverter_model'].iloc[0],
             'sum_ac' : ac_cap/1000,
             'time_offset' : float("nan")
         }, index = data_site.index)
@@ -538,10 +538,11 @@ class TrippingCurt():
             tripping_curt_energy = 0
         else:
             # Clean output_df before exporting to csv
-            output_df_to_export = output_df[['ac','c_id','cf','clean','con_type','duration','energy','est_cf','est_kW',
-                                                 'est_kWh','reactive_power','first_ac','gen_kWh','gen_loss_est_kWh','manufacturer',
-                                                 'model','power_kW','site_id','v',
-                                                 'zero_flag', 'time_in_seconds']]
+#             output_df_to_export = output_df[['ac','c_id','cf','clean','con_type','duration','energy','est_cf','est_kW',
+#                                                  'est_kWh','reactive_power','first_ac','gen_kWh','gen_loss_est_kWh','manufacturer',
+#                                                  'model','power_kW','site_id','v',
+#                                                  'zero_flag', 'time_in_seconds']]
+            output_df_to_export = output_df[['ac','c_id','cf','clean','con_type','duration','energy','est_cf','est_kW', 'est_kWh','reactive_power','first_ac','gen_kWh','gen_loss_est_kWh', 'power_kW','site_id','v', 'zero_flag', 'time_in_seconds']]
 
 
             # --------------------------------- Get summary stats
@@ -558,8 +559,8 @@ class TrippingCurt():
             'mean_v_all_daylight_hours': output_df.groupby('site_id')['v'].mean(),
             'first_ac': output_df.groupby('site_id')['first_ac'].first(),
             'ac': output_df.groupby('site_id')['ac'].first(),
-            'model': output_df.groupby('site_id')['model'].first(),
-            'manufacturer': output_df.groupby('site_id')['manufacturer'].first()
+            #'model': output_df.groupby('site_id')['model'].first(),
+            #'manufacturer': output_df.groupby('site_id')['manufacturer'].first()
             })
 
             # Concat onto results df and name the index

@@ -58,8 +58,8 @@ class FileProcessing():
             unique_cids (df): array of c_id and site_id values. 
         """
 
-        circuit_details = pd.read_csv(file_path + r"/unsw_20190701_circuit_details.csv")
-        site_details = pd.read_csv (file_path + r"/unsw_20190701_site_details.csv")
+        circuit_details = pd.read_csv(file_path + r"/details_c_id.csv")
+        site_details = pd.read_csv (file_path + r"/details_site_id.csv")
         site_details = site_details.merge(circuit_details, left_on = 'site_id', right_on = 'site_id')
         unique_cids = pd.read_csv(file_path + r"/UniqueCids500.csv", index_col = 0)
         return site_details, unique_cids

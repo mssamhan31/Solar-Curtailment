@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "solarcurtailment"
-version = "1.0.0"
+version = "2.0.0"
 description = "Analyze solar curtailment of a certain site in a certain date"
 readme = "README.md"
-authors = [{ name = "Naomi Stringer, Baran Yildiz, Timothy Klymenko, M. Syahman Samhan", email = "m.samhan@student.unsw.edu.au" }]
+authors = [{ name = "Naomi Stringer, Baran Yildiz, Timothy Klymenko, M. Syahman Samhan", email = "baran.yildiz@unsw.edu.au" }]
 license = { file = "LICENSE.md" }
 classifiers = [
     "License :: OSI Approved :: MIT License",
@@ -19,5 +19,5 @@ dependencies = []
 requires-python = ">=3.7"
 
 [project.urls]
-repository    = "https://github.com/mssamhan31/Solar-Curtailment"
-documentation = "https://github.com/mssamhan31/Solar-Curtailment#readme"
+repository    = "https://github.com/UNSW-CEEM/Solar-Curtailment"
+documentation = "https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/README.md"
