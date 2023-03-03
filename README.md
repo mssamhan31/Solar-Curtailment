@@ -29,9 +29,9 @@ This tool can benefit researchers and future projects which would like to unders
 This project runs completely in python with common libraries using Jupyter Notebook (or user's preferred integrated development environment -IDE).
 
 For quick start,
-1. Download all the required data file and keep it into a certain folder. All the required data files are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EvguTkYy48RGiXaQE5aP1l4B2OriyWIwqvi29mUL_ReKDw?e=4ceZec). Files inside the monthly D-PV or monthly GHI data are not needed. The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx). 
+1. Download all the required data file and keep it into a certain folder. All the required data files are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EtkrxlpfbK1Lk4i2mDUV8UkBaVueqizXyOLUmVnqflIZiA?e=8fI2ff). The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/dataset%20information.docx). 
 2. Install Solar-Curtailment package in terminal using "pip install solarcurtailment". This is then imported in the script using "from solarcurtailment import curtailment_calculation"
-3. Adopt the script in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/test/test_solarcurtailment.ipynb), and edit the file_path in accordance with the place you save the data files.
+3. Adopt the script in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/test/test_solarcurtailment.ipynb), and edit the file_path in accordance with the place you save the data files.
 
 ## Demonstration of the tool use
 Currently, the tool can only be demonstrated for D-PV systems as the BESS dataset is confidential as per the non-disclosure agreement (NDA) between project partners. The authors are working to obtain BESS data samples that can be used for the demonstration of the tool.
@@ -42,15 +42,15 @@ a) Time-series D-PV data from a certain site and a date, and
 b) GHI data of a certain date. 
 
 Sample images for the format of D-PV and GHI data can be seen via the images below:
-![Input Data](https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_data.PNG?raw=true)  
+<img width="600" alt="image" src="https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_data.PNG?raw=true">
 
 GHI Data for a certain date (we showed only the relevant column):  
 <img width="400" alt="image" src="https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_ghi_cleaned.png?raw=true">
 
 The other input files we use are 
 1. UniqueCids.csv, consisting of c_id and site_id list for all sites
-2. unsw_20190701_circuit_details.csv, consisting the detail of the circuit
-3. unsw_20190701_site_details.csv, consisting the detail of the site.
+2. details_c_id.csv, consisting the detail of the circuit
+3. details_site_id.csv, consisting the detail of the site.
 The detailed explanations of all datasets are provided in the 'solar curtailment dataset information.docx' under the documentations folder.
 Via using the input data, the tool produces 4 main outputs:
 
