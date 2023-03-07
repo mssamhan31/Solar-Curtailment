@@ -29,7 +29,7 @@ This tool can benefit researchers and future projects which would like to unders
 This project runs completely in python with common libraries using Jupyter Notebook (or user's preferred integrated development environment -IDE).
 
 For quick start,
-1. Download all the required data file and keep it into a certain folder. All the required data files are available in [this link](https://unsw-my.sharepoint.com/:f:/g/personal/z5404477_ad_unsw_edu_au/EtkrxlpfbK1Lk4i2mDUV8UkBaVueqizXyOLUmVnqflIZiA?e=8fI2ff). The dataset information are available in [this link](https://github.com/mssamhan31/Solar-Curtailment/blob/main/documentations/dataset%20information.docx). 
+1. Download all the required data file and keep it into a certain folder. All the required data files are available in [this link](https://unsw.sharepoint.com/:f:/s/PV-CANVAS/EhK2aKuJsFhLqkhUUV5ZUQABRWoG8PmI-EoArXCAEQZszA?e=fAU3KP). The dataset information are available in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx). 
 2. Install Solar-Curtailment package in terminal using "pip install solarcurtailment". This is then imported in the script using "from solarcurtailment import curtailment_calculation"
 3. Adopt the script in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/test/test_solarcurtailment.ipynb), and edit the file_path in accordance with the place you save the data files.
 
@@ -42,10 +42,10 @@ a) Time-series D-PV data from a certain site and a date, and
 b) GHI data of a certain date. 
 
 Sample images for the format of D-PV and GHI data can be seen via the images below:
-<img width="600" alt="image" src="https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_data.PNG?raw=true">
+<img width="600" alt="image" src="https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/image/input_data.PNG?raw=true">
 
 GHI Data for a certain date (we showed only the relevant column):  
-<img width="400" alt="image" src="https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/input_ghi_cleaned.png?raw=true">
+<img width="400" alt="image" src="https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/image/input_ghi_cleaned.png?raw=true">
 
 The other input files we use are 
 1. UniqueCids.csv, consisting of c_id and site_id list for all sites
@@ -56,7 +56,7 @@ Via using the input data, the tool produces 4 main outputs:
 
 
 ### Output 1. Summary Table
-![Output 1](https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/output_summary.PNG?raw=true)  
+![Output 1](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/image/output_summary.PNG?raw=true)  
 This summary table shows whether the date is a clear sky day or not, how much is the measured total energy generated in that day, how much is the expected energy generated without curtailment, estimation method used to calculate the expected energy generation, and most importantly:
 1.	Tripping response and the associated tripping curtailment
 2.	V-VAr response and the associated V-VAr curtailment 
@@ -64,12 +64,12 @@ This summary table shows whether the date is a clear sky day or not, how much is
 To illustrate the summary table, we visualize the data into 3 plots below:
 
 ### Output 2. GHI Plot
-![Output 1](https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/output_ghi.png?raw=true)  
+![Output 1](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/image/output_ghi.png?raw=true)  
 
 This GHI plot shows the irradiance of a certain day.
 
 ### Output 3. Scatter plot of real power, reactive power, and power factor vs voltage
-![Output 3](https://github.com/mssamhan31/Solar-Curtailment/blob/main/image/output_scatter.png?raw=true)  
+![Output 3](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/image/output_scatter.png?raw=true)  
 The real power and reactive power is normalized by VA rating of the inverter, so the maximum value is 1. For a site with V-VAr response, inverter is expected to absorb/inject VAR according to it's respective V-VAr curve.
 For a site with V-Watt response, we expect a scatter of real power to reduce linearly in high voltages (as seen in the image with voltages equal or greater than 251V).
 
