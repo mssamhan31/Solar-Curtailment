@@ -232,13 +232,13 @@ Similary, the GHI data we have is a monthly data. So, we filter it into certain 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for instructions to contribute to this open-source tool.
 
 ## Project Partners
-The project partners of CANVAS are: AGL, SA Power Networks (SAPN), Solar Analytics, and University of New South Wales (UNSW).
+The project partners of the RACE for 2030 CANVAS project are: AGL, SA Power Networks (SAPN), Solar Analytics, and University of New South Wales (UNSW). The development of the open-source tool was supported by the funding from the Digital Grid Future Institute (DGFI), UNSW.
 
 ## Authors
 
 * **Naomi M Stringer** - *Tripping Algorithm*
-* **Baran Yildiz** - *VVAr Algorithm* & Lead Chief Investigator
-* **Tim Klymenko** - *VWatt Algorithm*
+* **Baran Yildiz** - *Lead Chief Investigator & V-VAr Algorithm* 
+* **Tim Klymenko** - *V-Watt Algorithm*
 * **M. Syahman Samhan** - *Merging of algorithms, Open Source Development & Implementation, Debugging*
 
 ## License
@@ -246,4 +246,5 @@ The project partners of CANVAS are: AGL, SA Power Networks (SAPN), Solar Analyti
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. 
 
 ## Contact
-Email baran.yildiz@unsw.edu.au
+The project welcomes opportunities to collaborate. 
+For any questions or enquiries, please contact Dr. Baran Yildiz (baran.yildiz@unsw.edu.au)
