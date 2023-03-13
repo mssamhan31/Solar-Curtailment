@@ -180,12 +180,14 @@ The illustration of this process can be seen via the image below:
 IMPORTANT: Please note that, due to some monitoring set-up errors, the raw VAr data needed in the original data-set had to be divided by 60 in order to find the actual one minutely values. This point may be irrelevant for new data-sets that user would like to work with.
 
 ### V-VAr Curtailment Calculation
-Unlike tripping, where tripping site must have energy curtailment, V-VAr enabled site can have zero curtailment. This is because the real power of the inverter may not be limited in the presence of VAr and it depends on the magnitude of absorbed/injected VArs. For example for an inverter with 5 kVA limit, absorbtion of 3 kVAr leaves 4 kW real power capacity and energy is only curtailed when inverter can generate more than 4 kW which is calculated based on the GHI (i.e. expected energy generation method above). To calculate the energy curtailed due to VVAr:
+Unlike the tripping curtailment, where the site which experiece tripping has energy curtailed due to zero generation, V-VAr enabled sites may not have any energy curtailed. This is because the real power of the inverter may not be limited in the presence of VAr and it depends on the magnitude of absorbed/injected VArs if the real power of the inverter is limited (i.e. V-VAr curtailment). For example for an inverter with 5 kVA limit, absorbtion of 3 kVAr leaves 4 kW real power capacity and energy is only curtailed when inverter can generate more than 4 kW which is calculated based on the GHI (i.e. expected energy generation method above). To calculate the energy curtailed due to V-VAr:
 1.	For clear sky day, we use polyfit to estimate the power generated without curtailment. 
 2.	For a non clear sky day, we multiply ghi data, dc_cap, and eff_system to estimate the PV-system power production.   
-3.  We filter out instances where inverter isn't absorbing or injecting VArs (there won't be V-VAr curtailment when there is no VAr).
+3. We filter out instances where inverter isn't absorbing or injecting VArs (there won't be V-VAr curtailment when there is no VAr).
 4.  For the remaining instances we compare the real vs. expected generation
-5.  We calculate the difference between the power production and the expected power production and if there is any discrepancy, we double check with VAr values to confirm V-VAr curtailment. It is worth to note, however, that the amount of energy curtailed in a non clear sky day are most likely overestimated. This is because no one can sure whether the curtailment is due to V-VAr response or due to cloud.
+5.  We calculate the difference between the actual power production and the expected power production and if there are any discrepancies, we double check with VAr values to confirm V-VAr curtailment. 
+ 
+It is worth to note, that the amount of energy curtailed in a non clear sky day are most likely overestimated. This is because no one can be sure whether the curtailment is due to V-VAr response or due to cloud cover.
 
 ### V-Watt Response Detection
 In a V-Watt enabled site, the real power limit value will decrease linearly with increasing voltage. The illustration, taken from AS/NZS 4777 2020 is shown below.   
