@@ -1,20 +1,20 @@
 ## About
 
-
 This open source tool is written as part of RACE for 2030, Curtailment and Network Voltage Analysis Study (CANVAS) project. The development of the open source tool is supported by funding from Digital Grid Futures Institute (DGFI), University of New South Wales (UNSW). 
-This tool measures the amount of curtailed energy from a residential or commercial distributed energy resource such as distributed PV (D-PV) and/or battery energy storage system (BESS) via one of the following inverter power quality response modes (PQRM):
-1. Tripping (inverter cease to operate during high voltage conditions)
-2. V-VAr Response (high levels of VAr absorbtion and injection limits inverter maximum real power)
-3. V-Watt Response (inverter linearly reduces its real power output as a function of voltage conditions)
 
-The tool uses the time-series measurements of:
+This tool measures the amount of curtailed energy from a residential or commercial distributed energy resource such as distributed PV (D-PV) and/or battery energy storage system (BESS) via one of the following inverter power quality response modes (PQRM):
+1. Tripping (anti-islanding & limits for sustained operation): Inverter cease to operate during high voltage conditions.
+2. V-VAr Response: High levels of VAr absorbtion and injection limits inverter maximum real power.
+3. V-Watt Response: Inverter linearly reduces its real power output as a function of voltage conditions.
+
+The tool uses the time-series telemetry data of:
 1. Voltage
 2. Real power (D-PV/BESS inverter)
 3. Reactive power (D-PV/BESS inverter)
 4. Global horizontal irradiance (GHI)
 5. Site information (dc and ac capacity of the inverter)
 
-Through analysing the data mentioned above, this tool aims to answer the questions below:
+Through analysing this data, the tool aims to answer the questions below:
 1.	Does the D-PV inverter trip? If so, how often? 
 2.	How much energy is lost due to tripping curtailment in kWh/day?
 3.	Does the D-PV inverter show V-VAr response?
@@ -22,14 +22,13 @@ Through analysing the data mentioned above, this tool aims to answer the questio
 5.	Does the D-PV inverter show V-Watt response?
 6.	How much energy is lost due to V-Watt curtailment in kWh/day?
 
-This tool can benefit researchers and future projects which would like to understand and quantify Distributed Energy Resources (DER) curtailment due to different PQRMs.
 
 ## Getting Started
 
-This project runs completely in python with common libraries using Jupyter Notebook (or user's preferred integrated development environment -IDE).
+The tool runs completely in python with common libraries using Jupyter Notebook (or user's preferred integrated development environment -IDE).
 
 For quick start,
-1. Download all the required data file and keep it into a certain folder. All the required data files are available in [this link](https://unsw.sharepoint.com/:f:/s/PV-CANVAS/EhK2aKuJsFhLqkhUUV5ZUQABRWoG8PmI-EoArXCAEQZszA?e=fAU3KP). The dataset information are available in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/documentations/solar%20curtailment%20dataset%20information.docx). 
+1. Download all the required data files and move them into your specific project folder. All the required data files are available in [this link](https://drive.google.com/drive/folders/1pQ3h7HCYYzm1rxQpw1sw4qD8-uZYcZ5R?usp=sharing). The dataset information are available in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/tree/main/documentations). 
 2. Install Solar-Curtailment package in terminal using "pip install solarcurtailment". This is then imported in the script using "from solarcurtailment import curtailment_calculation"
 3. Adopt the script in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/test/test_solarcurtailment.ipynb), and edit the file_path in accordance with the place you save the data files.
 
@@ -246,5 +245,6 @@ The project partners of the RACE for 2030 CANVAS project are: AGL, SA Power Netw
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. 
 
 ## Contact
-The project welcomes opportunities to collaborate. 
+The tool is aimed to help researchers and future projects which would like to understand and quantify Distributed Energy Resources (DER) curtailment due to different PQRMs. The open-source tool welcomes feedback and collaboration opportunities.
+
 For any questions or enquiries, please contact Dr. Baran Yildiz (baran.yildiz@unsw.edu.au)
