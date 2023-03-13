@@ -187,23 +187,23 @@ Unlike the tripping curtailment, where the site which experiece tripping has ene
 4.  For the remaining instances we compare the real vs. expected generation
 5.  We calculate the difference between the actual power production and the expected power production and if there are any discrepancies, we double check with VAr values to confirm V-VAr curtailment. 
  
-It is worth to note, that the amount of energy curtailed in a non clear sky day are most likely overestimated. This is because no one can be sure whether the curtailment is due to V-VAr response or due to cloud cover.
+It is worth to note that the amount of energy curtailed in a non clear sky day is most likely overestimated. This is because it is difficult to be sure whether the curtailment is due to V-VAr response or due to cloud cover.
 
 ### V-Watt Response Detection
-In a V-Watt enabled site, the real power limit value will decrease linearly with increasing voltage. The illustration, taken from AS/NZS 4777 2020 is shown below.   
+In a V-Watt mode enabled site, the real power limit value will decrease linearly with increasing voltage. The illustration, taken from AS/NZS 4777.2 2020 is shown below.   
 <img width="500" alt="illustration_vwatt_curve" src="https://user-images.githubusercontent.com/110155265/193739913-7682ba54-8027-4b54-a756-bba93c038d59.png">
 
-For convenience, let's call voltage where the real power starts decreasing, as threshold voltage. In the picture above, it is denoted as V3. It can vary from 235-255 V according to AS/NZS 4777 2020. The voltage will stop decreasing exactly at V4 = 265 V, where the real power limit is 20% the ac capacity of the inverter (after this voltage, inverter must trip and cease to operate). That is why we need to check the scatter plot of power with voltage, whether it matches one of the possible V-Watt curve, as the voltage threshold can vary from 235-255 V. The preliminary steps for V-Watt response detection are:
-1.	If it is not a clear sky day, it is inconclusive. This is because in a non clear sky day, we cannot be sure the decreasing value of real power is due to cloud or due to V-Watt respones.
-2.	Else we check the polyfit quality. If the polyfit quality is not good enough, it is inconclusive as well. This is because the ghi observation station can be far than the actual site location, which makes the clear sky day judgement inaccurate. In that case, it is possible for the script to detect the day as a clear sky day, but the polyfit quality is not good enough because the cloud only covers the site area and not the ghi observation station area. 
-3.	Else we check whether the dataset contain points where the voltage is more 235 V. If not, it is inconclusive because there are no points to be checked for V-Watt response, as 235 V is the minimum possible value of threshold value.  
+For convenience, let's call the voltage value where the real power starts decreasing as the threshold voltage. In the picture above, it is denoted as V3. It can vary from 235-255 V according to AS/NZS 4777.2 2020. The voltage will stop decreasing exactly at V4 = 265 V, where the real power limit is 20% of the ac capacity of the inverter (after this voltage, inverter must trip and cease to operate). That is why we need to check the scatter plot of power against voltage and check whether it matches one of the possible V-Watt curve, as the voltage threshold can vary from 235-255 V. The preliminary criteria for V-Watt response detection are:
+1.	If it is not a clear sky day, it is inconclusive. This is because in a non clear sky day, we cannot be sure if the decreasing value of real power is due to cloud or due to V-Watt respones.
+2.	Else, we check the polyfit quality. If the polyfit quality is not good enough, it is inconclusive as well. This is because the ghi observation station can be far than the actual site location, which makes the clear sky day judgement inaccurate. In that case, it is possible for the script to detect the day as a clear sky day, but the polyfit quality is not good enough because the cloud only covers the site area and not the ghi observation station area. 
+3.	Else we check whether the dataset contain points where the voltage is more 235 V. If not, it is inconclusive because there are no points to be checked for the V-Watt response, as 235 V is the minimum possible value of threshold value.  
 
-If it passes these preliminary steps, meaning it is a clear sky day with good polyfit quality and available overvoltage points, we then check the V-Watt response. For each of the possible V-Watt curve (from 235-255 V threshold voltage), we check the actual data with these steps:
+If the site passes these preliminary criteria, meaning it is a clear sky day with good polyfit quality and some voltages above the minimum Volt-Watt voltage threshod point (235V), we then check the V-Watt response. For each of the possible V-Watt curve (from 235-255 V threshold voltage), we check the actual data with following steps:
 1. Determine the threshold voltage value, for example, 235 V
-2. Form a V-Watt response curve with the corresponding threshold value. For example, if we have 235 V as the threshold value, the maximum real power starts decreases linearly until 265 V, where the real power limit is 20%. We call this curve as Power Limit VWatt.
-3. Find datapoints where the expected real power is higher than the Power Limit VWatt. It means there is a possibility of curtailment in these datapoints. We call this points as suspect data. The visualization can be seen below. 
+2. Form a V-Watt response curve with the corresponding threshold value. For example, if we have 235 V as the threshold value V3, the maximum real power starts decreases linearly until 265 V, where the real power limit is 20%. We call this curve as Power Limit V-Watt.
+3. Find datapoints where the expected real power is higher than the Power Limit V-Watt. It means there is a possibility of curtailment in these datapoints. These are possible points where V-Watt curtailment is observed (suspect data). An example visualization can be seen below. 
 ![image](https://user-images.githubusercontent.com/110155265/193739423-4d9e537d-936b-44ea-8112-2805ab6848e3.png)  
-4. Add buffer for the Power Limit VWatt curve from the step 2, using 150 watt value distance. Using this step, we obtain the lower buffer and upper buffer which is illustrated below.  
+4. Add buffer for the Power Limit V-Watt curve from the step 2, using 150 watt as distance from the both sides of the curve. Using this step, we obtain the lower buffer and upper buffer which is illustrated below. This helps to eliminate the risk of incorrect conclusions of V-Watt curve due to possible noises in the data.  
 ![image](https://user-images.githubusercontent.com/110155265/193739479-c1d57c00-d000-4759-93f1-6ae82ba45af0.png)
 
 5.	Then, we count the percentage of datapoints in the suspect data which lie in the buffer range of the V-Watt curve from step 3. The percentage, which we call compliance percentage, is calculated by dividing the number of actual real power points in the buffer range by the total number of actual real power points. If the current compliance percentage is higher than the current best percentage, we renew the best percentage value by this number.  
@@ -211,37 +211,40 @@ If it passes these preliminary steps, meaning it is a clear sky day with good po
 
 6. We do step 1-5 through all possible threshold voltage and decide which threshold voltage gives the highest compliance percentage and what is its corresponding compliance percentage value.
 
-We decide a certain site is a V-Watt enabled site only if the highest percentage compliance is higher than a percentage threshold, 84% and the number of actual point lying in the buffer is more than a count threshold, which is 30. 
+We conclude that a certain site is a V-Watt enabled site only if the highest percentage compliance is higher than a percentage threshold, 84% (found through experimentation and visual validation) and the number of actual point lying in the buffer is more than a count threshold, which is 30. 
 
 If  
 1. The above criteria is not satisfied and 
 2. The maximum available voltage of the suspect data is less than 255,  
 
-we say that it is inconclusive due to insufficient data points. This is because the possibility of it being a V-Watt enabled site but the voltage threshold value is higher than the maximum available voltage datapoints. 
+then, it is inconclusive due to insufficient data points. This is because although there is possibility that the site has V-Watt mode enabled site, the voltage threshold value is higher than the maximum available voltage datapoints. 
 
 If
 1. The above criteria is not satisfied and 
 2. The maximum available voltage of the suspect data is at least 255,  
 
-we decide that it is a non V-Watt enabled site. 
+then it is concluded that it is a non V-Watt enabled site. 
 
 
 ### V-Watt Curtailment Calculation
-For a V-Watt enabled site, the curtailed energy is equal to the expected energy generated subtracted by the actual energy generated. The expected energy generated and the actual energy generated are calculated by the time-series power data and time-series expected power data using the Expected Energy Generation Method by polyfit estimation mentioned before. 
+For a V-Watt enabled site, the curtailed energy is equal to the expected energy generated subtracted by the actual energy generated. The expected energy generated and the actual energy generated are calculated by the time-series power data and time-series expected power data using the Expected Energy Generation Method by polyfit estimation as mentioned before. 
 
 ### Sample File Creation
-The raw time series D-PV data is from Solar Analytics which consists of a monthly data with 500 sites mixed into a file. In this tool, we analyze a specific site for a certain date. So, for testing purpose, we create sample simply by filtering the data for a certain day and certain site. 
+
+The raw time series D-PV data is from Solar Analytics, a smart home and D-PV monitoring company, which consists of a monthly data with 500 sites mixed into a file. In this tool, we analyze a specific site for a certain date. So, for testing purpose, we create sample simply by filtering the data for a certain day and certain site. 
+
 For convenience, we also process the time series D-PV data by converting the time from UTC time into local time (Adelaide GMT + 9:30). 
-Similary, the GHI data we have is a monthly data. So, we filter it into certain dates for the sample analysis period. We also process the ghi data by adding a timestamp column by combining some columns like year, month ,day, hour, and minute information. 
 
-## Tool Limitation & Notes
+Similary, the GHI data is monthly. So, we filter it into certain dates for the sample analysis period. We also process the ghi data by adding a timestamp column by combining some columns like year, month ,day, hour, and minute information. 
 
-1. The tool is currently limited to measuring one curtailment mode at a time. Tripping curtailment can't co-exist with other modes however, V-VAr and V-Watt can operate simultaneously. In the studied sites, majority didn't have V-VAr mode enabled so this limitation didn't impact our results. However, as more inverters start complying with both modes, analysis of simultaneous operations of these modes are necessary and this is a primary future research objective.
+## CANVAS Open-Source Tool Limitation & Notes
 
-2. The data-set doesn't include the actual VA capacity of the inverter, and therefore, we used the AC capacity as VA capacity. For some sites, this was an underestimation, as their VA capacity calculated from the real and reactive power exceeded the inverter's AC capacity. This may have resulted in over-estimation of V-VAr curtailment for some inverters as they had higher VA capacity in reality than their assumed VA capacity (AC capacity) in our study.   
+1. The tool is currently limited to measuring one type of curtailment mode at a time. Tripping curtailment can't co-exist with other modes however, V-VAr and V-Watt can operate simultaneously. In the studied sites, majority didn't have V-VAr mode enabled so this limitation didn't impact our results. However, as more inverters start complying with both modes, analysis of simultaneous operations of these modes are necessary and this is a primary future research objective.
+
+2. The data-set doesn't include the actual VA capacity of the inverter, and therefore, we used the AC real power capacity as VA capacity. For some sites, this was an underestimation, as their VA capacity calculated from the real and reactive power exceeded the inverter's AC capacity. This may have resulted in over-estimation of V-VAr curtailment for some inverters as they had higher VA capacity in reality than their assumed VA capacity (AC capacity) in our study.   
 
 
-## Some Related Articles and Papers
+## Related Articles and Papers on the CANVAS Project
 1. https://www.pv-magazine-australia.com/2021/05/24/unsw-digs-the-data-how-much-solar-energy-is-lost-through-automated-inverter-settings/
 2. https://www.abc.net.au/news/science/2022-02-16/solar-how-is-it-affected-by-renewable-energy-curtailment/100830738
 3. https://greenreview.com.au/energy/rooftop-solar-pv-curtailment-raises-fairness-concerns/
@@ -257,8 +260,8 @@ The project partners of the RACE for 2030 CANVAS project are: AGL, SA Power Netw
 
 ## Authors
 
-* **Naomi M Stringer** - *Tripping Algorithm*
 * **Baran Yildiz** - *Lead Chief Investigator & V-VAr Algorithm* 
+* **Naomi M Stringer** - *Tripping Algorithm*
 * **Tim Klymenko** - *V-Watt Algorithm*
 * **M. Syahman Samhan** - *Merging of algorithms, Open Source Development & Implementation, Debugging*
 
@@ -267,6 +270,6 @@ The project partners of the RACE for 2030 CANVAS project are: AGL, SA Power Netw
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. 
 
 ## Contact
-The tool is aimed to help researchers and future projects which would like to understand and quantify Distributed Energy Resources (DER) curtailment due to different PQRMs. The open-source tool welcomes feedback and collaboration opportunities.
+The tool is aimed to help researchers and future projects which would like to understand and quantify Distributed Energy Resources (DER) curtailment due to different inverter power quality response modes (PQRMs). CANVAS open-source tool welcomes feedback and future collaboration opportunities.
 
 For any questions or enquiries, please contact Dr. Baran Yildiz (baran.yildiz@unsw.edu.au)
