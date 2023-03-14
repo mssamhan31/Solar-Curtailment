@@ -41,7 +41,7 @@ a) D-PV energy and power data,
 b) D-PV reactive power data,
 c) Voltage
 d) Duration of each time-stamp
-b) Global Horizontal Irrandiance (GHI) data 
+e) Global Horizontal Irrandiance (GHI) data 
 
 Sample images demonstrate the required format of D-PV and GHI data can be seen via the images below:
 <img width="600" alt="image" src="https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/image/input_data.PNG?raw=true">
