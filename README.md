@@ -272,4 +272,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Contact
 The tool is aimed to help researchers and future projects which would like to understand and quantify Distributed Energy Resources (DER) curtailment due to different inverter power quality response modes (PQRMs). CANVAS open-source tool welcomes feedback and future collaboration opportunities.
 
-For any questions or enquiries, please contact Dr. Baran Yildiz (baran.yildiz@unsw.edu.au)
+For any questions or enquiries, please contact Dr. Baran Yildiz (baran.yildiz@unsw.edu.au) 
