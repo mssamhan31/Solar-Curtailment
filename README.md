@@ -28,7 +28,7 @@ Through analysing this data, the tool aims to answer the questions below:
 The tool runs completely in python with common libraries using Jupyter Notebook (or user's preferred integrated development environment -IDE).
 
 For quick start,
-1. Download all the required data files and move them into your specific project folder. All the required data files are available in [this link](https://drive.google.com/drive/folders/1pQ3h7HCYYzm1rxQpw1sw4qD8-uZYcZ5R?usp=sharing). The dataset information are available in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/tree/main/documentations). 
+1. Download all the required data files and move them into your specific project folder. All the required data files are available on the folder *sample inputs*. The dataset information are available in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/tree/main/documentations). 
 2. Install Solar-Curtailment package in terminal using "pip install solarcurtailment". This is then imported in the script using "from solarcurtailment import curtailment_calculation"
 3. Adopt the script in [this link](https://github.com/UNSW-CEEM/Solar-Curtailment/blob/main/test/test_solarcurtailment.ipynb), and edit the file_path in accordance with the place you save the data files.
 
